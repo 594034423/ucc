@@ -13,16 +13,13 @@
     <div id="app">
         <div class="tree-list">
             <el-tree 
-            :data="tree"
-            node-key="id"
-            icon-class="el-icon-caret-right"
-            :props="defaultProps"
-            ref="tree"
-            @node-click="handleNodeClick"
+                :data="tree"
+                node-key="id"
+                icon-class="el-icon-caret-right"
+                :props="defaultProps"
+                ref="tree"
+                @node-click="handleNodeClick"
             ></el-tree>
-        </div>
-        <div>
-            <iframe src="" frameborder="0"></iframe>
         </div>
     </div>
 </body>
@@ -81,10 +78,9 @@
 </script>
 <style type="text/css">
     .el-tree {
-        border: 1px solid red;
-        position: absolute;
         width: 140px;
-
+        position: absolute;
+        height: 100%;
     }
     .tree-list {
         width: 140px;
