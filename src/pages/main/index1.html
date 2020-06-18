@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../common/element-ui/css/element.css">
+    <link rel="stylesheet" href="../../styles/element-ui.css">
+    <script src="../../common/vue/js/vue.js" type="text/javascript"></script>
+    <script src="../../common/element-ui/js/element.js" type="text/javascript"></script>
+    <script src="../../common/vue/js/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="tree-list">
+            <el-tree 
+            :data="tree"
+            node-key="id"
+            icon-class="el-icon-caret-right"
+            :props="defaultProps"
+            ref="tree"
+            @node-click="handleNodeClick"
+            ></el-tree>
+        </div>
+        <div>
+            <iframe src="" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        name: 'index1',
+        el: '#app',
+        data: {
+            tree:[{
+                label: '一级 1',
+                    children: [{
+                        label: '二级 1-1',
+                        children: [{
+                        label: '三级 1-1-1'
+                        }]
+                    }]
+                    }, {
+                    label: '一级 2',
+                    children: [{
+                        label: '二级 2-1',
+                        children: [{
+                        label: '三级 2-1-1'
+                        }]
+                    }, {
+                        label: '二级 2-2',
+                        children: [{
+                        label: '三级 2-2-1'
+                        }]
+                    }]
+                    }, {
+                    label: '一级 3',
+                    children: [{
+                        label: '二级 3-1',
+                        children: [{
+                        label: '三级 3-1-1'
+                        }]
+                    }, {
+                        label: '二级 3-2',
+                        children: [{
+                        label: '三级 3-2-1'
+                        }]
+                    }]
+                }],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                }
+
+        },
+        methods: {
+            handleNodeClick(data) {
+                console.log(data);
+            }
+        }
+    })
+</script>
+<style type="text/css">
+    .el-tree {
+        border: 1px solid red;
+        position: absolute;
+        width: 140px;
+
+    }
+    .tree-list {
+        width: 140px;
+    }
+</style>
+</html>

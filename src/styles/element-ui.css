@@ -1,0 +1,42 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+/* 头部 */
+.el-header {
+    padding: 0;
+}
+
+.header-right{
+    float: right !important ;
+}
+
+#agent-name {
+    color: #fff !important;
+}
+.el-menu--horizontal>.el-menu-item {
+    border: none;
+}
+
+.el-badge__content.is-fixed {
+    top: 18px;
+    right: 16px;
+}
+
+
+/* 侧边导航栏 */
+.el-aside{
+    width: auto!important;
+}
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 140px;
+    min-height: 400px;
+  }
+  .el-menu-item,.el-menu-item i {
+      color: #fff
+  }
+/* 主页面 */
+.el-main {
+    padding: 0;
+}
