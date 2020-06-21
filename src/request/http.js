@@ -123,7 +123,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
-export function get(url, params){    
+function get(url, params){    
     return new Promise((resolve, reject) =>{        
         axios.get(url, {            
             params: params        
@@ -141,7 +141,7 @@ export function get(url, params){
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
-export function post(url, params) {    
+function post(url, params) {    
     return new Promise((resolve, reject) => {         
         axios.post(url, QS.stringify(params))        
         .then(res => {            
