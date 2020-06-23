@@ -18,9 +18,9 @@
         <div class="container">
             <div class="select-data">
                 <span class="title">线上营业厅话务监控</span>
-                <div class="btn-one">
-                    <el-button size="samll" autofocus="autofocus" plain @click="click_AllChannels">{{btn_AllChannels}}</el-button>
-                    <el-dropdown>
+                <div class="btn-one" ref="btnone">
+                    <el-button size="samll" plain @click="click_AllChannels">{{btn_AllChannels}}</el-button>
+                    <el-dropdown trigger="click">
                         <el-button size="samll" plain>
                             {{btn_Channel}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -33,7 +33,7 @@
 
                 <div class="btn-two">
                     <el-button size="samll" plain @click="click_AllSkillGroups">{{btn_AllSkillGroups}}</el-button>
-                <el-dropdown>
+                <el-dropdown trigger="click">
                     <el-button size="samll" plain>
                         {{btn_SkillGroups}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -51,7 +51,7 @@
                         <tbody>
                             <tr>
                                 <td width="50%" class="font-size18">当前排队数</td>
-                                <td width="50%" class="font-size18">当前通话数</td>
+                                <td width="40%" class="font-size18">当前通话数</td>
                             </tr>
                             <tr>
                                 <td class="font-size24">12</td>
@@ -74,7 +74,7 @@
                         <tbody>
                             <tr>
                                 <td width="50%" class="font-size18">今日应答数</td>
-                                <td width="50%" class="font-size18">今日应答率</td>
+                                <td width="40%" class="font-size18">今日应答率</td>
                             </tr>
                             <tr>
                                 <td class="font-size24">1212</td>
@@ -169,9 +169,9 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td width="70%" class="footer-fontsize">呼入量排名</td>
-                                    <td width="15%" class="footer-fontsize">渠道</td>
-                                    <td width="20%" class="footer-fontsize">技能组</td>
+                                    <td width="60%" class="footer-fontsize">呼入量排名</td>
+                                    <td width="20%" class="footer-fontsize">渠道</td>
+                                    <td width="15%" class="footer-fontsize">技能组</td>
                                 </tr>
                                 <tr v-for="(item, index) in skillGroupsList" :key="item.id">
                                     <td class="footer-fontsize">{{item.id}} {{item.name}}</td>

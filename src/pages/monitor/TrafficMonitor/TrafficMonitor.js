@@ -47,12 +47,12 @@ var vm = new Vue({
         ],
         // DateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         dateValue: '',  //时间选择器时间
+        isAct: true
     },
     mounted(){
         this.satisfactionEcharts();
         this.callInNumsEcharts();
         this.inOutTrendEcharts();
-
         // Echart 缩放
         let _this = this;
         window.addEventListener('resize', function () { 
@@ -215,7 +215,7 @@ var vm = new Vue({
 
         //呼入呼出趋势 --柱形图
         inOutTrendEcharts(){
-            console.log(this.$refs.inOutTrendEcharts,111)
+            console.log(this.$refs.inOutTrendEcharts)
             var dom = this.$refs.inOutTrendEcharts;
             this.inOutTrendContainer = echarts.init(dom);
             var option = {
@@ -289,5 +289,8 @@ var vm = new Vue({
                 }]
             })
         },
+        tabBtn(index) {
+            console.log(11)
+        }
     }
 })

@@ -6,6 +6,11 @@ body {
     display: flex;
     padding: 20px;
     flex-direction: column;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
 }
 
 .first-data {
@@ -17,7 +22,7 @@ body {
 .btn-skill {
     display: inline-block;
 }
-.echart-content1 {
+.echart-content2 {
     width: 23%;
     background-color: #fff;
     padding: 10px;
@@ -45,16 +50,14 @@ table {
     font-size: 24px;
     font-weight: 500;
 }
-#onSiteStatusAgentNumsEcharts, #onSiteStatusAgentNumsEcharts {
+#onSiteStatusAgentNumsEcharts, #onSiteStarAgentNumsEcharts {
     height: 160px;
     width: 100%;
-    padding-bottom: 10px;
 }
-
-#todayStatus:hover{
-    background-color: rgb(255, 251, 251);
+#skillGroupsAgentStatusEcharts {
+    height:300px;
+    width: 100%;
 }
-
 .title {
     font-size: 30px;
     margin-right: 40px;
@@ -67,11 +70,6 @@ table {
     padding: 10px;
 }
 
-.btn-callin,.btn-callout {
-    border-radius: 0px;
-    border: none;
-    font-size: 18px;
-}
 .el-button+.el-button {
     margin-left: 0;
 }
@@ -80,27 +78,11 @@ table {
     background-color: #fff;
     margin-top: 10px;
     /* height: 100%; */
+    padding: 10px
 }
-
-.btn-date {
-    border-radius: 0px;
-    border: none;
-    /* font-size: 18px; */
-}
-
-.select-date,.select-picker {
-    display: inline-block;
-}
-
-.el-button--text {
-    margin-right: 10px;
-}
-
-
-.header-right {
-    position: relative;
-    right: 10px;
-    top: 7px;
+.header-data {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
 }
 .footer-data {
     height: 100%;
@@ -109,19 +91,7 @@ table {
     padding: 0 10px;
     margin-top: 20px;
 }
-.footer-left {
-    width: 70%;
-}
-.footer-right {
-    width: 30%
-}
-.footer-nums {
-    text-align: center;
-    padding: 10px 0;
-}
-#inOutTrendEcharts {
-    height: 300px;
-}
+
 
 @media screen and (max-width:750px)
 {
@@ -133,47 +103,19 @@ table {
         width: inherit;
         margin: 4px 0;
     }
+    .el-button--samll {
+        padding: 7px 15px;
+        font-size: 12px;
+    }
     .title {
         display: block;
         text-align: center;
         font-size: 24px;
         margin: 4px 0;
     }
-    .el-button--samll {
-        padding: 7px 15px;
-        font-size: 12px;
-    }
-    .header-right {
-        display: none;
-    }
-    
-
-    .footer-data {
-        flex-direction: column;
-    }
-
-    .footer-left,.footer-right {
-        width:100%;
-    }
-
-    #inOutTrendEcharts {
-        height: 150px;
-    }
-
-    .footer-data {
-        margin-top: 6px;
-    }
-
-    .footer-right {
-        margin-top: 10px;
-    }
-
-    .footer-fontsize {
-        font-size: 12px;
-    }
-    .footer-nums {
-        font-size: 12px;
-        padding: 4px 0;
+    .echart-content2 {
+        width: inherit;
+        margin: 4px 0;
     }
 }
 
