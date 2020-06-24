@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线上营业厅柜员状态监控</title>
+    <link rel="stylesheet" href="../../../common/element-ui/css/element.css">
+    <link rel="stylesheet" href="../../../styles/element-ui.css">
+    <link rel="stylesheet" href="./AgentStatusMonitor.css">
+    <script src="../../../common/vue/js/vue.js" type="text/javascript"></script>
+    <script src="../../../common/echarts/echarts.min.js"></script>
+    <script src="../../../common/element-ui/js/element.js" type="text/javascript"></script>
+    <script src="../../../common/vue/js/axios.min.js"></script>
+    
+</head>
+<body>
+    <!-- 线上营业厅柜员状态监控 -->
+    <div id="app">
+        <div class="container">
+            <div class="select-data">
+                <span class="title">线上营业厅柜员状态监控</span>
+                <div class="btn-one" ref="btnone">
+                    <el-button size="samll" plain @click="click_AllSkillGroups">{{btn_AllSkillGroups}}</el-button>
+                    <el-dropdown trigger="click">
+                        <el-button size="samll" plain>
+                            {{btn_SkillGroups}}
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item  v-for="(item, index) in skillGroupsList" :key="item.id" @click.native="select_SkillGroupsList(item.name)">{{item.name}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+
+                <div class="btn-two">
+                    <el-button size="samll" plain @click="click_Scene">{{btn_Scene}}</el-button>
+                    <el-button size="samll" plain @click="click_Outlets">{{btn_Outlets}}</el-button>
+                    <el-button size="samll" plain @click="click_PanyuSubBranch" :disabled="isDsiabeld">{{btn_PanyuSubBranch}}</el-button>
+                </div>
+            </div>
+            <div class="table-data">
+                <el-table
+                    :data="tableDate"
+                    >
+                    <el-table-column
+                        v-for="item in tableHeader" :key="item.key"   
+                        :property="item.key"
+                        :label="item.label"
+                        :width="item.width"
+                        sortable
+                        >
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="table-pagination">
+                <el-button class="btn-currentPage" size="mini" @current-change="handleCurrentChange">确定</el-button>
+                <el-pagination
+                    v-for="item in tablePagination"
+                    :key="item.currentPage"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="item.currentPage"
+                    :page-sizes="item.pageSizes"
+                    :page-size="item.pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="item.total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./AgentStatusMonitor.js"></script>
+</html>

@@ -108,7 +108,6 @@ table {
     top: 7px;
 }
 .footer-data {
-    height: 100%;
     display: flex;
     background-color: #fff;
     justify-content: space-between;
@@ -132,6 +131,9 @@ table {
 
 @media screen and (max-width:750px)
 {
+    .container {
+        padding: 10px;
+    }
     .first-data {
         justify-content: space-around;
         flex-direction: column;
