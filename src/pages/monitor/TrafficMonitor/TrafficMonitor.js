@@ -229,7 +229,7 @@ var vm = new Vue({
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '3%',
+                    bottom: '8%',
                     top: '8%',
                     containLabel: true
                 },
