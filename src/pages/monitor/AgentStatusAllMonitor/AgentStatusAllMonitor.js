@@ -75,9 +75,8 @@ var vm = new Vue({
                 },
                 legend: {
                     orient: 'vertical',
-                    right: 20,
-                    top: 20,
-                    itemWidth: 28,
+                    left: '55%',
+                    top:'20%',
                     textStyle: {
                         fontSize: 14,
                         lineHeight: 14,
@@ -110,7 +109,7 @@ var vm = new Vue({
                         type: 'pie',
                         radius: ['50%', '80%'],
                         center: ['25%', '50%'],
-                        avoidLabelOverlap: false,
+                        // avoidLabelOverlap: false,
                         label: {
                             show: false,
                             position: 'center'
@@ -163,8 +162,8 @@ var vm = new Vue({
                 },
                 legend: {
                     orient: 'vertical',
-                    right: 30,
-                    top: 20,
+                    left: '55%',
+                    top:'20%',
                     itemWidth: 28,
                     textStyle: {
                         fontSize: 14,

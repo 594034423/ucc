@@ -26,29 +26,28 @@ body {
     margin-right: 40px;
 }
 .echart-content {
-    width: 23%;
+    width: 22.5%;
     background-color: #fff;
-    padding: 10px;
+    padding: 15px;
 }
 table {
     border-spacing: 0;
 }
-.font-size12 {
-    font-size: 12px;
+.font-size1 {
+    font-size: 26px;
+}
+.font-size2 {
+    font-size: 16px;
     color: rgb(136, 136, 136);
 }
-.font-size16 {
-    font-size: 16px;
+.font-size3 {
+    font-size: 34px;
 }
-.font-size18 {
-    font-size: 20px;
-}
-.font-size24 {
+.font-size4 {
     font-size: 24px;
-    font-weight: 500;
 }
-#satisfactionEcharts, #callInNumsEcharts {
-    height: 50px;
+#transactionRateEcharts, #transactionNumsEcharts,#transactionPeakEcharts{
+    height: 80px;
     width: 100%;
     padding-bottom: 10px;
     border-bottom: 1px solid #ccc;
@@ -76,17 +75,18 @@ table {
 }
 
 .second-data {
-    position: relative;
     background-color: #fff;
     margin-top: 10px;
     padding: 10px;
-    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn-date {
     border-radius: 0px;
     border: none;
-    /* font-size: 18px; */
+    font-size: 18px;
 }
 
 .select-date,.select-picker {
@@ -100,6 +100,7 @@ table {
 .header-data {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
+    height: 60px;
 }
 
 .header-right {
@@ -112,6 +113,7 @@ table {
     background-color: #fff;
     justify-content: space-between;
     margin-top: 20px;
+    flex: 1;
 }
 .footer-left {
     width: 70%;
@@ -124,19 +126,48 @@ table {
     text-align: center;
     padding: 10px 0;
 }
-#inOutTrendEcharts {
+#transactionTrendEcharts {
     margin-top: 10px;
-    height: 300px;
+    height: 100%;
+}
+@media screen  and (max-width:1400px) and (min-width:750px) {
+    .font-size1 {
+        font-size: 20px;
+    }
+    .font-size2 {
+        font-size: 14px;
+        color: rgb(136, 136, 136);
+    }
+    .font-size3 {
+        font-size: 30px;
+    }
+    .font-size4 {
+        font-size: 20px;
+    }
 }
 
 @media screen and (max-width:750px)
-{   
+{
     .container {
         padding: 10px;
+        position: relative;
     }
     .first-data {
         justify-content: space-around;
         flex-direction: column;
+    }
+    .font-size1 {
+        font-size: 20px;
+    }
+    .font-size2 {
+        font-size: 14px;
+        color: rgb(136, 136, 136);
+    }
+    .font-size3 {
+        font-size: 30px;
+    }
+    .font-size4 {
+        font-size: 18px;
     }
     .echart-content {
         width: inherit;
@@ -152,6 +183,9 @@ table {
         padding: 7px 15px;
         font-size: 12px;
     }
+    .header-data {
+        height: 30px;
+    }
     .header-right {
         display: none;
     }
@@ -164,10 +198,10 @@ table {
 
     .footer-left,.footer-right {
         width:100%;
-        height: 100%;
+        flex: 1;
     }
 
-    #inOutTrendEcharts {
+    #transactionTrendEcharts {
         height: 160px;
     }
 
