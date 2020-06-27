@@ -18,7 +18,6 @@ body {
     margin-top: 10px;
     justify-content: space-between;
     display: flex;
-    height: 100%;
 }
 .btn-one,.btn-two {
     display: inline-block;
@@ -121,7 +120,7 @@ table {
     background-color: #fff;
 }
 .footer-right {
-    width: 25%
+    width: 30%
 }
 .footer-nums {
     text-align: center;
