@@ -8,6 +8,9 @@ var vm = new Vue({
         btn_Outlets: '网点', // 网点按钮
         btn_PanyuSubBranch: '番禺支行', //番禺支行按钮
         isDsiabeld: true,   //控制番禺支行按钮是否显示
+        skillGroupAct: 'AllSkillGroups',   //技能组控制点击按钮
+        fieldAct: 'Scene',
+        branchAct: false,
         //技能组列表
         skillGroupsList: [
             {name: '手机银行', id: '1', nums: 1000},
@@ -163,26 +166,32 @@ var vm = new Vue({
     },
     methods: {
         // 点击全部技能组
-        click_AllSkillGroups(){
+        click_AllSkillGroups(index){
+            this.skillGroupAct = index
             console.log(this.btn_AllSkillGroups)
         },
-        // 点击现场
-        click_Scene(){
-            console.log(this.btn_Scene)
-            this.isDsiabeld = true
-        },
-        // 点击网点
-        click_Outlets(){
-            console.log(this.btn_Outlets)
-            this.isDsiabeld = false
-        },
-        click_PanyuSubBranch() {
-            console.log(this.btn_PanyuSubBranch)
-        },
+
         //选择单一业务组
         select_SkillGroupsList(name) {
             console.log(name)
             this.btn_SkillGroups = name
+            this.skillGroupAct = 'SkillGroups'
+        },
+        // 点击现场
+        click_Scene(index){
+            console.log(this.btn_Scene)
+            this.isDsiabeld = true
+            this.fieldAct = index
+        },
+        // 点击网点
+        click_Outlets(index){
+            console.log(this.btn_Outlets)
+            this.isDsiabeld = false
+            this.fieldAct = index
+        },
+        click_PanyuSubBranch() {
+            console.log(this.btn_PanyuSubBranch)
+            this.branchAct = !this.branchAct
         },
 
         //差评率颜色显示
@@ -197,6 +206,6 @@ var vm = new Vue({
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
-        },
-    }
+        }
+    },
 })

@@ -1,5 +1,5 @@
-import axios from '../common/vue/js/axios.min.js';
-import QS from '../common/qs/js/qs.js';
+// import axios from '../common/vue/js/axios.min.js';
+// import QS from '../common/qs/js/qs.js';
 // import { Toast } from 'mint-ui';
 // import store from '../store/index'
 
@@ -11,6 +11,9 @@ import QS from '../common/qs/js/qs.js';
 // } else if (process.env.NODE_ENV == 'production') {    
 //     axios.defaults.baseURL = 'http://192.168.0.80/uomp/';
 // }
+
+// axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = 'http://192.168.0.103:9085'
 
 // 请求超时时间
 axios.defaults.timeout = 10000;
@@ -34,24 +37,22 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 
 //  token 处理 --- 本地存储 localStorage
-    // aixos.interceptors.request.use(
-    //     config => {
-    //         let token = window.localStorage.getItem('accessToken')
-    //         if(token){
-    //             //将token放到请求头发送给服务器,将tokenkey放在请求头中
-    //             config.headers.accessToken = token;
-    //             //这种写法也可以,token字段是要和后端协商好的,这里是 accessToken
-    //             //config.headers['accessToken'] = token;
-    //             //config.headers.common["accessToken"] = token;
-    //         }
-    //         return token
-    //     },
-    //     error => {
-    //         return Promise.reject(error);
-    //     }
-    // )
-
-
+// axios.interceptors.request.use(
+//     config => {
+//         let token = window.localStorage.getItem('accessToken')
+//         if(token){
+//             //将token放到请求头发送给服务器,将tokenkey放在请求头中
+//             config.headers.accessToken = token;
+//             //这种写法也可以,token字段是要和后端协商好的,这里是 accessToken
+//             //config.headers['accessToken'] = token;
+//             //config.headers.common["accessToken"] = token;
+//         }
+//         return token
+//     },
+//     error => {
+//         return Promise.reject(error);
+//     }
+// )
 
 // 响应拦截器
 // axios.interceptors.response.use(    
@@ -143,7 +144,7 @@ function get(url, params){
  */
 function post(url, params) {    
     return new Promise((resolve, reject) => {         
-        axios.post(url, QS.stringify(params))        
+        axios.post(url, params)        
         .then(res => {            
             resolve(res.data);        
         })        

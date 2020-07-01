@@ -6,6 +6,7 @@ var vm = new Vue({
         transactionNumsContainer: null, // 交易量
         transactionTrendContainer: null,// 交易量趋势
         transactionPeakContainer:null, //交易峰值
+        transactionTypeContainer:null, //交易类型占比
         btn_AllChannels: '全部渠道', //按钮名称
         btn_Channel: '手机银行', //按钮名称
         btn_AllSkillGroups: '全部技能组', 
@@ -19,9 +20,12 @@ var vm = new Vue({
         trend:'交易量趋势',
         transactionTrend: '交易量趋势',
         successRateTrend: '成功率趋势',
-        transactionRank: '呼入量排名',
-        inRank: '呼入量排名',
-        outRank: '呼出量排名',
+        transactionRank: '交易量排名',
+        channelAct:'AllChannels',     //渠道控制点击按钮样式
+        skillGroupAct: 'AllSkillGroups',   //技能组控制点击按钮
+        trendAct: 'TransactionNums',     //呼入按钮点击控制
+        dateAct:'D', 
+        transAct: 'D',
         channelList: [
             {name: '手机银行', id: '1', nums: 10130},
             {name: '官方公众号', id: '2', nums: 10040},
@@ -39,24 +43,39 @@ var vm = new Vue({
             {name: '理财业务', id: '5' ,nums: 150},
             {name: '贷款业务', id: '6' ,nums: 1010},
             {name: '反欺诈业务', id: '7' ,nums: 140},
+        ],       
+        hotTransactionList: [
+            {name: '账户密码重置', id: '1', nums: 11234, up: '13%' },
+            {name: '客户资料修改', id: '2', nums: 1040, up: '50%' },
+            {name: '手机号更变', id: '3', nums: 1240, up: '12%' },
+            {name: '贷款面签', id: '4' ,nums: 105, up: '51%' },
+            {name: '理财风险评估', id: '5' ,nums: 150, up: '12%' },
+            {name: '手机号修改', id: '6' ,nums: 1010, up: '23%' },
+            {name: '反欺诈业务', id: '7' ,nums: 140, up: '12%' },
         ],
+        
         dateList: [
-            {name: '今日', id: '1'},
-            {name: '本周', id: '2'},
-            {name: '本月', id: '3'},
-            {name: '全年', id: '4'},
+            {name: '今日', id: 'D'},
+            {name: '本周', id: 'W'},
+            {name: '本月', id: 'M'},
+            {name: '全年', id: 'Y'},
         ],
         // DateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         dateValue: '',  //时间选择器时间
-        isAct: true
+        isAct: true,
+        transDateList: [
+            {name: '今日', id: 'D'},
+            {name: '近15分钟', id: 'F'},
+        ],
     },
     mounted(){
-        this.transactionRateEcharts();
-        this.transactionNumsEcharts();
-        this.transactionTrendEcharts();
-        this.transactionPeakEcharts()
         // Echart 缩放
         let _this = this;
+        _this.transactionRateEcharts();
+        _this.transactionNumsEcharts();
+        _this.transactionTrendEcharts();
+        _this.transactionPeakEcharts();
+        _this.transactionTypeEcharts();
         window.addEventListener('resize', function () { 
             if (_this.resizeTimer) clearTimeout(_this.resizeTimer);
                 _this.resizeTimer = setTimeout(function () {
@@ -64,6 +83,7 @@ var vm = new Vue({
                 _this.transactionNumsContainer.resize();
                 _this.transactionTrendContainer.resize();
                 _this.transactionPeakContainer.resize();
+                _this.transactionTypeContainer.resize();
             }, 100)
         })
 
@@ -74,10 +94,13 @@ var vm = new Vue({
             this.refreshTransactionNumsEcharts()
         },2000)
         setTimeout(() =>{
-            this.refreshInOutTrendEcharts()
+            this.refreshTransactionTrendEcharts()
         },2000)
         setTimeout(() =>{
-            this.transactionPeakEcharts()
+            this.refreshTransactionPeakEcharts()
+        },2000)
+        setTimeout(()=> {
+            this.refreshTransactionTypeEcharts();
         },2000)
     },
     watch: {
@@ -88,42 +111,68 @@ var vm = new Vue({
     },
     methods: {
         // 点击全部渠道
-        click_AllChannels(){
-            console.log(this.btn_AllChannels)
+        click_AllChannels(index){
+            this.channelAct = index
+            sessionStorage.setItem('channelIndex', this.channelAct)
+            console.log(this.channelAct)
         },
-        // 点击全部技能组
-        click_AllSkillGroups(){
-            console.log(this.btn_AllSkillGroups)
-        },
-        // 点击交易量
-        click_TransactionNums(){
-            console.log(this.btn_TransactionNums)
-            this.trend = this.transactionTrend
-        },
-        // 点击成功率
-        click_SuccessRate(){
-            console.log(this.btn_SuccessRate)
-            this.trend = this.successRateTrend
-        },
+
         //选择单一渠道
         select_Channel(name) {
-            console.log(name)
             this.btn_Channel = name
+            this.channelAct = 'Channel'
+            sessionStorage.setItem('channelIndex', this.channelAct)
+            console.log(this.channelAct)
         },
+
+
+        // 点击全部技能组
+        click_AllSkillGroups(index){
+            this.skillGroupAct = index
+            console.log(this.skillGroupAct)
+            sessionStorage.setItem('skillGroupIndex', this.skillGroupAct)
+        },
+
         //选择单一业务组
         select_SkillGroups(name) {
-            console.log(name)
             this.btn_SkillGroups = name
+            this.skillGroupAct = 'SkillGroups'
+            sessionStorage.setItem('skillGroupIndex', this.skillGroupAct)
+            console.log(this.skillGroupAct)
         },
-        select_Date(name) {
-            console.log(name)
+
+        // 点击交易量
+        click_TransactionNums(index){
+            console.log(this.btn_TransactionNums)
+            this.trend = this.transactionTrend
+            this.trendAct = index
+            console.log(index)
+            sessionStorage.setItem('trendIndex', this.trendAct)
+        },
+        // 点击成功率
+        click_SuccessRate(index){
+            console.log(this.btn_SuccessRate)
+            this.trend = this.successRateTrend
+            this.trendAct = index
+            console.log(index)
+            sessionStorage.setItem('trendIndex', this.trendAct)
+        },
+
+        select_Date(index) {
+            console.log(index)
+            this.dateAct = index
+            sessionStorage.setItem('dateIndex',index)
         },
         select_DateTime() {
             console.log(111)
         },
+        click_TransDate(index) {
+            console.log(index)
+            this.transAct = index
+        },
         
 
-        //满意度 --曲线图
+        //交易成功率--曲线图
         transactionRateEcharts(){
             console.log(this.$refs.transactionRateEcharts)
             var dom = this.$refs.transactionRateEcharts;
@@ -154,7 +203,7 @@ var vm = new Vue({
                     top: 1
                 },
                 series: [{
-                    name: '满意度',
+                    name: '交易成功率',
                     type: 'line',
                     data: [211,133,420,624,144, 932,811,301,243, 14,616, 1290, 110, 4320, 22],
                     smooth: true,
@@ -202,9 +251,9 @@ var vm = new Vue({
                     top: 1
                 },
                 series: [{
-                    name: '满意度',
+                    name: '交易峰值',
                     type: 'line',
-                    data: [211,133,420,624,144, 932,811,301,243, 14,616, 1290, 110, 4320, 22],
+                    data: [2211,1333,420,124,344, 232, 1114, 301, 1243, 142, 2616, 1290, 3110, 320, 222],
                     smooth: true,
                     symbol: 'none',  //取消这点圆圈
                     areaStyle: {},
@@ -219,7 +268,7 @@ var vm = new Vue({
             }
         },
 
-        //呼入量 --曲线图
+        //交易量--柱形图
         transactionNumsEcharts(){
             console.log(this.$refs.transactionNumsEcharts)
             var dom = this.$refs.transactionNumsEcharts;
@@ -254,7 +303,7 @@ var vm = new Vue({
                 },
                 series: [
                     {
-                        name: '呼入量',
+                        name: '交易量',
                         type: 'bar',
                         barWidth: '60%',
                         data: [10, 52, 200, 334, 390, 330, 220, 10, 222, 145, 111, 10, 75, 24, 666]
@@ -267,7 +316,7 @@ var vm = new Vue({
             }
         },
 
-        //呼入呼出趋势 --柱形图
+        //交易趋势 --柱形图
         transactionTrendEcharts(){
             console.log(this.$refs.transactionTrendEcharts)
             var dom = this.$refs.transactionTrendEcharts;
@@ -301,7 +350,7 @@ var vm = new Vue({
                 }],
                 series: [
                     {
-                        name: '呼入量',
+                        name: '交易量',
                         type: 'bar',
                         barWidth: '60%',
                         data: [10, 52, 200, 334, 390, 330, 220, 10, 222, 145, 111, 10, 75, 24, 666]
@@ -314,9 +363,103 @@ var vm = new Vue({
             }
         },
 
-        // 模拟刷新呼入量
+        //交易量类型占比
+        transactionTypeEcharts() {
+            console.log(this.$refs.transactionTypeEcharts)
+            var dom = this.$refs.transactionTypeEcharts;
+            this.transactionTypeContainer = echarts.init(dom)
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: '50%',
+                    top:'25%',
+                    icon: 'circle',
+                    itemGap:14,
+                    itemHeight:8,
+                    itemWidth:8,
+                    textStyle: {
+                        fontSize: 14,
+                        lineHeight: 14,
+                        // rich 富文本 name 对应formatter里面的 name
+                        //      相当于插入一个空槽
+                        rich: {
+                            name:{
+                                fontSize:16,
+                                align:'left',
+                                width: 110
+                            },
+                            value: {
+                                fontSize:16,
+                                align:'center',
+                            }
+                        }
+                    },
+                    data: ['账号密码重置', '手机号变更', '振铃', '通话', '事后处理'],
+                    formatter: (params) => {
+                        for( var i = 0; i < option.series[0].data.length; i++ ){
+                            if(option.series[0].data[i].name == params) {
+                                return `{name|${params}} {value|${option.series[0].data[i].value}}`
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: ['50%', '60%'],
+                        center: ['25%', '50%'],
+                        // avoidLabelOverlap: false,
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: '18',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        //设置颜色
+                        itemStyle: {
+                            normal:{  
+                                color: function (params){
+                                    var colorList = [
+                                        '#FF6565','#7B6CFF','#FF6CB8','#D56CFF','#6CD7FF','#FF6565','#7B6CFF','#FF6CB8','#D56CFF','#6CD7FF'
+                                        ];
+                                    return colorList[params.dataIndex];
+                                },
+                                borderWidth: 2,
+                                borderColor: '#fff',
+                            }
+                        },
+                        data: [
+                            {value: 1335, name: '账号密码重置'},
+                            {value: 310, name: '手机号变更'},
+                            {value: 234, name: '振铃'},
+                            {value: 135, name: '通话'},
+                            {value: 1548, name: '事后处理'}
+                        ],
+                    }
+                ]
+            }
+            if(option && typeof option === 'object') {
+                this.transactionTypeContainer.setOption(option, true)
+            }
+        },
+
+
+        // 模拟刷新交易量
         refreshTransactionNumsEcharts(){
-            var data = [320, 600, 250, 180, 40, 210, 180, 22, 66, 99, 12, 34, 47, 46, 111];
+            var data = [3202, 200, 2350, 1801, 140, 4210, 5180, 22, 66, 99, 12, 34, 47, 46, 111];
             this.transactionNumsContainer.setOption({
                 series: [{
                     data: data
@@ -326,7 +469,7 @@ var vm = new Vue({
 
         // 模拟刷新满意度
         refreshtransactionRateEcharts(){
-            var data = [211,133,420,624,144, 932,811, 601, 2143, 142, 1616, 290, 1310, 1220, 12];
+            var data = [211,1233,420,6424,1454, 9132,8111, 6201, 2143, 142, 1616, 290, 1310, 1220, 12];
             this.transactionRateContainer.setOption({
                 series: [{
                     data: data
@@ -335,7 +478,7 @@ var vm = new Vue({
         },
 
         //刷新峰值
-        refreshtransactionPeakEcharts(){
+        refreshTransactionPeakEcharts(){
             var data = [211,133,420,624,144, 932,811, 601, 2143, 142, 1616, 290, 1310, 1220, 12];
             this.transactionPeakContainer.setOption({
                 series: [{
@@ -344,10 +487,27 @@ var vm = new Vue({
             })
         },
 
-        // 模拟刷新呼入呼出趋势
-        refreshInOutTrendEcharts(){
-            var data = [211,133,420,624,144, 932,811, 601, 2143, 142, 1616, 290, 1310, 1220, 12];
+        // 模拟刷新交易趋势
+        refreshTransactionTrendEcharts(){
+            var data = [111,333,1420,224,145, 612,111, 621, 2153, 142, 1616, 1290, 1110, 1520, 121];
             this.transactionTrendContainer.setOption({
+                series: [{
+                    data: data
+                }]
+            })
+            console.log(11)
+        },
+
+        // 模拟刷新交易量类型占比
+        refreshTransactionTypeEcharts(){
+            var data = [
+                {value: 1152, name: '账号密码重置'},
+                {value: 3102, name: '手机号变更'},
+                {value: 434, name: '振铃'},
+                {value: 535, name: '通话'},
+                {value: 1548, name: '事后处理'}
+            ];
+            this.transactionTypeContainer.setOption({
                 series: [{
                     data: data
                 }]

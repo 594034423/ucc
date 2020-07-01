@@ -12,10 +12,10 @@ body,html {
 .el-dropdown-link {
     cursor: pointer;
     color: #409EFF;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+}
+.el-icon-arrow-down {
+font-size: 12px;
+}
 .header-right{
     float: right !important ;
 }
@@ -34,9 +34,17 @@ body,html {
     right: 16px;
 }
 
-.el-menu-item,.header-right,.is-active {
-    color: #000;
+.el-menu-item .header-right .is-active {
+    color: #fff;
 }
+
+.el-dropdown {
+    color: #409EFF;
+}
+.el-menu-item.is-active i {
+    color: #409EFF;
+}
+
 
 /* 侧边导航栏 */
 .el-aside{

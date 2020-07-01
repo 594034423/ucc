@@ -20,9 +20,9 @@
             <div class="select-data">
                 <span class="title">线上营业厅柜员状态监控</span>
                 <div class="btn-one" ref="btnone">
-                    <el-button size="samll" plain @click="click_AllSkillGroups">{{btn_AllSkillGroups}}</el-button>
+                    <el-button size="samll" plain @click="click_AllSkillGroups('AllSkillGroups')" :class="{btnactive:skillGroupAct == 'AllSkillGroups'}">{{btn_AllSkillGroups}}</el-button>
                     <el-dropdown trigger="click">
-                        <el-button size="samll" plain>
+                        <el-button size="samll" plain :class="{btnactive:skillGroupAct == 'SkillGroups'}">
                             {{btn_SkillGroups}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -33,9 +33,9 @@
                 </div>
 
                 <div class="btn-two">
-                    <el-button size="samll" plain @click="click_Scene">{{btn_Scene}}</el-button>
-                    <el-button size="samll" plain @click="click_Outlets">{{btn_Outlets}}</el-button>
-                    <el-button size="samll" plain @click="click_PanyuSubBranch" :disabled="isDsiabeld">{{btn_PanyuSubBranch}}</el-button>
+                    <el-button size="samll" plain @click="click_Scene('Scene')" :class="{btnactive:fieldAct == 'Scene'}">{{btn_Scene}}</el-button>
+                    <el-button size="samll" plain @click="click_Outlets('Outlets')" :class="{btnactive:fieldAct == 'Outlets'}">{{btn_Outlets}}</el-button>
+                    <el-button size="samll" plain @click="click_PanyuSubBranch" :disabled="isDsiabeld" :class="{btnactive:branchAct == true}">{{btn_PanyuSubBranch}}</el-button>
                 </div>
             </div>
             <div class="table-data">

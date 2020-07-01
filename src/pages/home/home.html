@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCC</title>
+    <link rel="stylesheet" href="./home.css">
     <link rel="stylesheet" href="../../common/element-ui/css/element.css">
     <link rel="stylesheet" href="../../styles/element-ui.css">
     <script src="../../common/vue/js/vue.js" type="text/javascript"></script>
@@ -12,9 +13,10 @@
 </head>
 <body>
       <div id="app">
+        <div class="container">
           <div class="left-box">
             <el-menu 
-                  default-active="1" 
+                  default-active="business" 
                   class="el-menu-vertical-demo" 
                   :collapse="isCollapse"
                   @select="jumpFrame"
@@ -25,64 +27,50 @@
                       <span slot="title">广州易云</span>
                     </template>
                   </el-menu-item>
-                    <el-menu-item index="1">
-                      <template>
-                        <i class="el-icon-location"></i>
-                        <span slot="title">导航一</span>
-                      </template>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">导航二</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                      <i class="el-icon-document"></i>
-                      <span slot="title">导航三</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                      <i class="el-icon-setting"></i>
-                      <span slot="title">导航四</span>
-                    </el-menu-item>
+                  <el-menu-item
+                  v-for="item in navList"
+                  :index="item.index">
+                    <i :class="item.icon"></i>
+                    <span slot="title">{{item.title}}</span>
+                  </el-menu-item>
                   </el-menu>
           </div>
           <div class="right-box">
-             <div class="header-box" style="height:60px">
+              <div class="header-box" style="height:60px">
                 <el-menu
-                class="el-menu-nav"
-                mode="horizontal"
-                text-color="#fff"
-                background-color="#545c64"
-                >
+                  class="el-menu-nav"
+                  mode="horizontal"
+                  text-color="#fff"
+                  background-color="#545c64"
+                  >
 
-                <el-menu-item @click="isCollapse = !isCollapse">
-                  <i class="el-icon-s-fold"></i>
-                </el-menu-item>
+                  <el-menu-item @click="isCollapse = !isCollapse">
+                    <i class="el-icon-s-fold"></i>
+                  </el-menu-item>
 
-                <el-menu-item index="1" class="header-right">
-                  <el-dropdown>
-                    <div class="login-out">
-                      <i class="el-icon-switch-button "></i>
-                    </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-              </el-menu-item>
+                  <el-menu-item index="1" class="header-right">
+                    <el-dropdown>
+                      <div class="login-out">
+                        <i class="el-icon-switch-button"></i>
+                      </div>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>退出登录</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </el-menu-item>
 
-              <el-menu-item index="2" class="header-right">
-              <el-dropdown>
-                <div class="agent-msg">
-                  <el-avatar :size="20" :src="circleUrl"></el-avatar>
-                  <span id="agent-name">{{agentName}}</span>
-                </div>
-
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人中心</el-dropdown-item>
-                    <el-dropdown-item>个人设置</el-dropdown-item>
-                  </el-dropdown-menu>
-
-                </el-dropdown>
-              </el-menu-item>
+                  <el-menu-item index="2" class="header-right">
+                    <el-dropdown>
+                      <div class="agent-msg">
+                        <el-avatar :size="20" :src="circleUrl"></el-avatar>
+                        <span id="agent-name">{{agentName}}</span>
+                      </div>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>个人中心</el-dropdown-item>
+                        <el-dropdown-item>个人设置</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </el-menu-item>
 
                 <el-popover
                   placement="bottom"
@@ -92,7 +80,7 @@
                     <el-tab-pane label="通知1212" name="first">
                       msg
                     </el-tab-pane>
-                    <el-tab-pane label="代办123123" name="second">
+                    <el-tab-pane label="代办112323123" name="second">
                       msg
                     </el-tab-pane>
                   </el-tabs>
@@ -103,104 +91,14 @@
                   </el-menu-item>
                 </el-popover>
               </el-menu>
-             </div>
+            </div>
               
-              <div class="iframe-container" v-for="(item,index) in iframeList" :key="item.id">
-                <iframe v-show="item.isFrameShow" :src="item.iframeSrc" frameborder="0" height="100%" :name="item.iframeName"></iframe>
-              </div>
+            <div class="iframe-container" v-for="(item,index) in iframeList" :key="item.id">
+              <iframe v-show="item.isFrameShow" :src="item.iframeSrc" frameborder="0" height="100%" :name="item.iframeName"></iframe>
+            </div>
           </div>
+        </div>
       </div>
 </body>
-<script type="text/javascript">
-    var vm = new Vue({
-        name: 'home',
-        el: '#app',
-        data: {
-            isCollapse: false,
-            badgeNum: 51,
-            activeName: 'first',
-            // isFrameShow: false,
-            iframeList: [
-              {iframeSrc:'../main/index1.html',id:1,iframeName:'iframe1', isFrameShow:true},
-              {iframeSrc:'../main/index2.html',id:2,iframeName:'iframe2', isFrameShow:false},
-              {iframeSrc:'../main/index3.html',id:3,iframeName:'iframe3', isFrameShow:false},
-              {iframeSrc:'../main/index4.html',id:4,iframeName:'iframe4', isFrameShow:false},
-            ],
-            agentName: '冒险岛',
-            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-        },
-        created(){
-          this.onload()
-        },
-        methods: {
-          isShowTabs() {
-            this.showTabs = !this.showTabs;
-            console.log(this.showTabs)
-          },
-          onload(){
-            axios.get('http://192.168.0.80/uomp/businessLabel/getAllLabelTreeGrid?labelType=business')
-            .then(res => {
-              console.log(res)
-            })
-            .catch(err => {
-              console.log(222);
-            })
-            
-        // apiAddress({labelType:buniness})
-        // .then(res => {
-        //   console.log(res)
-        // })
-        // .catch(err =>{
-        //   console.log(err)
-        // })
-      },
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
-
-
-      //控制iframe显示与隐藏，保证页面不刷新
-      jumpFrame(index) {
-        console.log(index)
-        this.frameIndex = index
-        for(let i=0; i<this.iframeList.length; i++){
-          if(index==this.iframeList[i].id){
-            this.iframeList[i].isFrameShow = true
-          }else{
-            this.iframeList[i].isFrameShow = false
-          }
-        }
-      }
-    
-        }
-    })
-</script>
-<style type="text/css">
-#app {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-#agent-name {
-  color:#fff;
-}
-.sidebar-logo {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    margin-right: 12px;
-}
-.left-box{
-  height: 100%;
-}
-.right-box {
-  height: 100%;
-  width: 100%;
-}
-.iframe-container {
-  position: absolute;
-  height: 100%;
-  /* background-color: red; */
-}
-</style>
+<script src="./home.js"></script>
 </html>

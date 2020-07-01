@@ -18,9 +18,9 @@
             <div class="select-data">
                 <span class="title">线上营业厅业务交易监控</span>
                 <div class="btn-one" ref="btnone">
-                    <el-button size="samll" plain @click="click_AllChannels">{{btn_AllChannels}}</el-button>
+                    <el-button size="samll" plain @click="click_AllChannels('AllChannels')" :class="{btnactive:channelAct =='AllChannels'}">{{btn_AllChannels}}</el-button>
                     <el-dropdown trigger="click">
-                        <el-button size="samll" plain>
+                        <el-button size="samll" plain :class="{btnactive:channelAct == 'Channel'}">
                             {{btn_Channel}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -31,9 +31,9 @@
                 </div>
 
                 <div class="btn-two">
-                    <el-button size="samll" plain @click="click_AllSkillGroups">{{btn_AllSkillGroups}}</el-button>
+                    <el-button size="samll" plain @click="click_AllSkillGroups('AllSkillGroups')" :class="{btnactive:skillGroupAct =='AllSkillGroups'}">{{btn_AllSkillGroups}}</el-button>
                 <el-dropdown trigger="click">
-                    <el-button size="samll" plain>
+                    <el-button size="samll" plain :class="{btnactive:skillGroupAct =='SkillGroups'}">
                         {{btn_SkillGroups}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -44,109 +44,119 @@
                 </div>
             </div>
             <div class="first-data">
-                <!-- 当前交易量-->
-                <div id="todayTransaction" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td width="50%">总交易量</td>
-                                <td width="30%">成功率</td>
-                                <td width="20%" style="color: #00c700;">99%</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td colspan="3">12123123</td>
-                            </tr>
-                            <tr height="90px" class="font-size4">
-                                <td colspan="3">
-                                    <span>周同比 12% <i class="el-icon-top"></i></span>
-                                    <span style="margin-left: 20px;">日同比 12% <i class="el-icon-top"></i></span>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="60%">今日交易量</td>
-                                <td width="30%">23,512</td>
-                                <td width="20%" style="color: #00c700;">100%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 交易峰值 -->
-                <div id="transactionPeak" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td>交易峰值</td>
-                                <td class="font-size2">(单位/日)</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td colspan="2">98%</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" width="100%" >
-                                    <div id="transactionPeakEcharts" ref="transactionPeakEcharts"></div>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="50%">今日交易峰值</td>
-                                <td width="50%">9623</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 满意度 -->
-                <div id="transactionRate" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td>交易成功率</td>
-                                <td class="font-size2">(单位/日)</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td colspan="2">98%</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" width="100%" >
-                                    <div id="transactionRateEcharts" ref="transactionRateEcharts"></div>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="50%">今日交易成功率</td>
-                                <td width="50%">96%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 交易量-->
-                <div id="transactionNums" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td width="80%">线下业务交易量</td>
-                                <td class="font-size2">(单位/日)</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td>640</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" width="100%">
-                                    <div id="transactionNumsEcharts" ref="transactionNumsEcharts"></div>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="50%">今日交易量</td>
-                                <td width="50%">1,834</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <div id="todayTransaction" class="echart-content">
+                            <table width="100%">
+                                <tbody>
+                                    <tr class="font-size1">
+                                        <td width="50%">总交易量</td>
+                                        <td width="30%">成功率</td>
+                                        <td width="20%" style="color: #00c700;">99%</td>
+                                    </tr>
+                                    <tr height="60px" class="font-size3">
+                                        <td colspan="3">12123123</td>
+                                    </tr>
+                                    <tr height="90px" class="font-size4">
+                                        <td colspan="3">
+                                            <span>周同比 12%<i class="el-icon-caret-top" style="color: red;"></i></span>
+                                            <span style="margin-left: 20px;">日同比 12% <i style="color:#00c700" class="el-icon-caret-bottom"></i></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="font-size4">
+                                        <td width="60%">今日交易量</td>
+                                        <td width="30%">23,512</td>
+                                        <td width="20%" style="color: #00c700;">100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <div id="transactionPeak" class="echart-content">
+                            <table width="100%">
+                                <tbody>
+                                    <tr class="font-size1">
+                                        <td width="80%">交易峰值</td>
+                                        <td class="font-size2">(单位/日)</td>
+                                    </tr>
+                                    <tr height="60px" class="font-size3">
+                                        <td colspan="2">6,246</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" width="100%" >
+                                            <div id="transactionPeakEcharts" ref="transactionPeakEcharts"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="font-size4">
+                                        <td width="50%">今日交易峰值</td>
+                                        <td width="50%">9623</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <div id="transactionRate" class="echart-content">
+                            <table width="100%">
+                                <tbody>
+                                    <tr class="font-size1">
+                                        <td width="80%">交易成功率</td>
+                                        <td class="font-size2">(单位/日)</td>
+                                    </tr>
+                                    <tr height="60px" class="font-size3">
+                                        <td colspan="2">98%</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" width="100%" >
+                                            <div id="transactionRateEcharts" ref="transactionRateEcharts"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="font-size4">
+                                        <td width="50%">今日交易成功率</td>
+                                        <td width="50%">96%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <div id="transactionNums" class="echart-content">
+                            <table width="100%">
+                                <tbody>
+                                    <tr class="font-size1">
+                                        <td width="80%">线下业务交易量</td>
+                                        <td class="font-size2">(单位/日)</td>
+                                    </tr>
+                                    <tr height="60px" class="font-size3">
+                                        <td>640</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" width="100%">
+                                            <div id="transactionNumsEcharts" ref="transactionNumsEcharts"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="font-size4">
+                                        <td width="50%">今日交易量</td>
+                                        <td>1,834</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </el-col>
+                </el-row>
             </div>
+
             <div class="second-data">
                 <div class="header-data">
-                    <el-button class="btn-callin" size="samll" plain @click="click_TransactionNums">{{btn_TransactionNums}}</el-button>
-                    <el-button class="btn-callout" size="samll" plain @click="click_SuccessRate">{{btn_SuccessRate}}</el-button>
+                    <el-button class="btn-callin" size="samll" plain @click="click_TransactionNums('TransactionNums')" :class="{btnactive:trendAct == 'TransactionNums'}">{{btn_TransactionNums}}</el-button>
+                    <el-button class="btn-callout" size="samll" plain @click="click_SuccessRate('SuccessRate')" :class="{btnactive:trendAct == 'SuccessRate'}">{{btn_SuccessRate}}</el-button>
                     <div class="header-right">
                         <div class="select-date" v-for="(item, index) in dateList" :key="item.id">
-                            <el-button class="btn-date" size="mini" plain @click="select_Date(item.name)">{{item.name}}</el-button>
+                            <el-button class="btn-date" size="mini" plain @click="select_Date(item.id)" :class="{btnactive:dateAct == item.id}">{{item.name}}</el-button>
                         </div>
                         <div class="select-picker">
                             <el-date-picker
@@ -184,7 +194,54 @@
                     </div>
                 </div>
             </div>
-            <div class="three-data"></div>
+            <div class="three-data">
+                <el-row :gutter="10">
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                        <div class="echart-content3">
+                            <div class="three-left-header">
+                                <span>热门交易</span>
+                                <div>
+                                    <el-button v-for="(item, index) in transDateList" :key="item.id" class="btn-trans-date" size="mini" plain @click="click_TransDate(item.id)" :class="{btnactive:transAct == item.id}">{{item.name}}</el-button>      
+                                </div>
+                            </div>
+                            <div class="three-left-content">
+                                <table width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td>排名</td>
+                                            <td>交易名称</td>
+                                            <td>交易量</td>
+                                            <td>日涨幅</td>
+                                        </tr>
+                                        <tr 
+                                        v-for="item in hotTransactionList"
+                                        :key="item.id"
+                                        height="34px"
+                                        >
+                                            <td>{{item.id}}</td>
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.nums}}</td>
+                                            <td>{{item.up}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                        <div class="echart-content3">
+                            <div class="three-right-header">
+                                <span>交易量类型占比</span>
+                            </div>
+                            <div class="three-right-content">
+                                <div id="transactionTypeEcharts" ref="transactionTypeEcharts">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
         </div>
     </div>
 </body>

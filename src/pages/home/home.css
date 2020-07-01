@@ -1,0 +1,31 @@
+#app {
+  width: 100%;
+  height: 100%;
+}
+.container {
+    width: 100%;
+  height: 100%;
+  display: flex;  
+}
+#agent-name {
+  color:#fff;
+}
+.sidebar-logo {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    margin-right: 12px;
+}
+.left-box{
+  height: 100%;
+}
+.right-box {
+  height: 100%;
+  width: 100%;
+}
+.iframe-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  /* background-color: yellow; */
+}

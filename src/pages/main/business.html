@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../common/element-ui/css/element.css">
+    <link rel="stylesheet" href="../../styles/element-ui.css">
+    <link rel="stylesheet" href="./business.css">
+    <script src="../../common/vue/js/vue.js" type="text/javascript"></script>
+    <script src="../../common/element-ui/js/element.js" type="text/javascript"></script>
+    <script src="../../common/vue/js/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="contianer">
+            <div class="tree-list">
+                <el-tree 
+                    :data="tree"
+                    node-key="id"
+                    icon-class="el-icon-caret-right"
+                    :props="defaultProps"
+                    ref="tree"
+                    @node-click="handleNodeClick"
+                ></el-tree>
+            </div>
+            <div class="iframe-container">
+                <iframe src="./business/childrenone.html" frameborder="0" name="business"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./business.js"></script>
+</html>

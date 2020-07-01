@@ -7,6 +7,7 @@ var vm = new Vue({
         skillGroupsAgentStatusContainer: null,// 技能组柜员状态统计
         btn_AllSkillGroups: '全部技能组', 
         btn_SkillGroups: '个人业务咨询',
+        skillGroupAct: 'AllSkillGroups',   //技能组控制点击按钮
         skillGroupsList: [
             {name: '个人业务咨询', id: '1', nums: 11234},
             {name: '个人业务办理', id: '2', nums: 1040},
@@ -16,6 +17,8 @@ var vm = new Vue({
             {name: '贷款业务', id: '6' ,nums: 1010},
             {name: '反欺诈业务', id: '7' ,nums: 140},
         ],
+        starValue: null,
+        starColors:['#99A9BF', '#F7BA2A', '#FF9900']
     },
     mounted(){
         this.onSiteStatusAgentNumsEcharts();
@@ -53,13 +56,15 @@ var vm = new Vue({
     },
     methods: {
         // 点击全部技能组
-        click_AllSkillGroups(){
+        click_AllSkillGroups(index){
+            this.skillGroupAct = index
             console.log(this.btn_AllSkillGroups)
         },
         //选择单一业务组
-        select_SkillGroups(name) {
-            console.log(name)
-            this.btn_SkillGroups = name
+        select_SkillGroups(index) {
+            console.log(index)
+            this.btn_SkillGroups = index
+            this.skillGroupAct = 'SkillGroups'
         },
         
 
@@ -107,7 +112,7 @@ var vm = new Vue({
                     {
                         name: '',
                         type: 'pie',
-                        radius: ['50%', '80%'],
+                        radius: ['50%', '65%'],
                         center: ['25%', '50%'],
                         // avoidLabelOverlap: false,
                         label: {
@@ -193,7 +198,7 @@ var vm = new Vue({
                     {
                         name: '',
                         type: 'pie',
-                        radius: ['50%', '80%'],
+                        radius: ['50%', '65%'],
                         center: ['25%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
@@ -329,6 +334,9 @@ var vm = new Vue({
                     source: data
                 }
             })
+        },
+        starRate(a){
+            console.log(a)
         }
     }
 })

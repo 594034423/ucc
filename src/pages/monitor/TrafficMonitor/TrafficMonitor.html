@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../common/element-ui/css/element.css">
     <link rel="stylesheet" href="../../../styles/element-ui.css">
-    <link rel="stylesheet" href="./TrafficMonitor.css">
+    <link rel="stylesheet" href="./trafficMonitor.css">
     <script src="../../../common/vue/js/vue.js" type="text/javascript"></script>
     <script src="../../../common/echarts/echarts.min.js"></script>
     <script src="../../../common/element-ui/js/element.js" type="text/javascript"></script>
     <script src="../../../common/vue/js/axios.min.js"></script>
+    <script src="../../../request/http.js"></script>
+    <script src="../../../request/api.js"></script>
 </head>
 <body>
     <!-- 线上营业厅话务监控 -->
@@ -18,9 +20,9 @@
             <div class="select-data">
                 <span class="title">线上营业厅话务监控</span>
                 <div class="btn-one" ref="btnone">
-                    <el-button size="samll" plain @click="click_AllChannels">{{btn_AllChannels}}</el-button>
+                    <el-button size="samll" plain @click="click_AllChannels('AllChannels')" :class="{btnactive:channelAct =='AllChannels'}">{{btn_AllChannels}}</el-button>
                     <el-dropdown trigger="click">
-                        <el-button size="samll" plain>
+                        <el-button size="samll" plain :class="{btnactive:channelAct == 'Channel'}">
                             {{btn_Channel}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
@@ -31,9 +33,11 @@
                 </div>
 
                 <div class="btn-two">
-                    <el-button size="samll" plain @click="click_AllSkillGroups">{{btn_AllSkillGroups}}</el-button>
+                    <el-button 
+                    size="samll" 
+                    plain @click="click_AllSkillGroups('AllSkillGroups')" :class="{btnactive:skillGroupsAct =='AllSkillGroups'}">{{btn_AllSkillGroups}}</el-button>
                 <el-dropdown trigger="click">
-                    <el-button size="samll" plain>
+                    <el-button size="samll" plain :class="{btnactive:skillGroupsAct == 'SkillGroups'}">
                         {{btn_SkillGroups}}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
@@ -44,110 +48,124 @@
                 </div>
             </div>
             <div class="first-data">
-                <!-- 当前通话排队数-->
-                <div id="todayStatus" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td width="50%">当前排队数</td>
-                                <td width="40%">当前通话数</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td>12</td>
-                                <td>58</td>
-                            </tr>
-                            <tr height="90px" class="font-size4">
-                                <td width="60%">当前平均排队时长</td>
-                                <td style="color: #00c700;">1秒</td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="60%">当前平均通话时长</td>
-                                <td>2分42秒</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 应答率 -->
-                <div id="responseRate" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td width="50%">今日应答数</td>
-                                <td width="40%">今日应答率</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td>1212</td>
-                                <td>58%</td>
-                            </tr>
-                            <tr height="90px" class="font-size4">
-                                <td width="60%">今日平均排队时长</td>
-                                <td style="color: #00c700;">10秒</td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="60%">今日平均通话时长</td>
-                                <td>2分42秒</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 呼入量 -->
-                <div id="callInNums" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td>呼入量</td>
-                                <td class="font-size2">(单位/日)</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td>6,240</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" width="100%">
-                                    <div id="callInNumsEcharts" ref="callInNumsEcharts"></div>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="50%">今日呼入量</td>
-                                <td width="50%">1,834</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- 满意度 -->
-                <div id="satisfaction" class="echart-content">
-                    <table width="100%">
-                        <tbody>
-                            <tr class="font-size1">
-                                <td>满意度</td>
-                                <td class="font-size2">(单位/日)</td>
-                            </tr>
-                            <tr height="60px" class="font-size3">
-                                <td colspan="2">98%</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" width="100%" >
-                                    <div id="satisfactionEcharts" ref="satisfactionEcharts"></div>
-                                </td>
-                            </tr>
-                            <tr class="font-size4">
-                                <td width="50%">今日满意度</td>
-                                <td width="50%">96%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <el-row :gutter="10">
+                <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                    <div id="todayStatus" class="echart-content">
+                        <table width="100%">
+                            <tbody>
+                                <tr class="font-size1">
+                                    <td width="50%">当前排队数</td>
+                                    <td width="40%">当前通话数</td>
+                                </tr>
+                                <tr height="60px" class="font-size3">
+                                    <td>{{todayData.currentLineUpWatiNum}}</td>
+                                    <td>{{todayData.talkingNum}}</td>
+                                </tr>
+                                <tr height="90px" class="font-size4">
+                                    <td width="60%">当前平均排队时长</td>
+                                    <td style="color: #00c700;">{{todayData.currentLineUpWatiAvgTime}}s</td>
+                                </tr>
+                                <tr class="font-size4">
+                                    <td width="60%">当前平均通话时长</td>
+                                    <td>{{todayData.currentTalkAvgTime}}s</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                    <!-- 应答率 -->
+                    <div id="responseRate" class="echart-content">
+                        <table width="100%">
+                            <tbody>
+                                <tr class="font-size1">
+                                    <td width="50%">今日应答数</td>
+                                    <td width="40%">今日应答率</td>
+                                </tr>
+                                <tr height="60px" class="font-size3">
+                                    <td>{{todayData.answerNum}}</td>
+                                    <td>{{(todayData.answerNum/todayData.joinQueryNum).toFixed(2)}}%</td>
+                                </tr>
+                                <tr height="90px" class="font-size4">
+                                    <td width="60%">今日平均排队时长</td>
+                                    <td style="color: #00c700;">{{todayData.lineUpWatiAvgTime}}s</td>
+                                </tr>
+                                <tr class="font-size4">
+                                    <td width="60%">今日平均通话时长</td>
+                                    <td>{{todayData.talkAvgTime}}s</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </el-col>
+                <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                    <!-- 呼入量 -->
+                    <div id="callInNums" class="echart-content">
+                        <table width="100%">
+                            <tbody>
+                                <tr class="font-size1">
+                                    <td>呼入量</td>
+                                    <td class="font-size2">(单位/日)</td>
+                                </tr>
+                                <tr height="60px" class="font-size3">
+                                    <td>{{fifteenData.joinQueryTotal}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="100%">
+                                        <div id="callInNumsEcharts" ref="callInNumsEcharts"></div>
+                                    </td>
+                                </tr>
+                                <tr class="font-size4">
+                                    <td width="50%">今日呼入量</td>
+                                    <td width="50%">{{todayData.joinQueryNum}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </el-col>
+                <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                    <!-- 满意度 -->
+                    <div id="satisfaction" class="echart-content">
+                        <table width="100%">
+                            <tbody>
+                                <tr class="font-size1">
+                                    <td>满意度</td>
+                                    <td class="font-size2">(单位/日)</td>
+                                </tr>
+                                <tr height="60px" class="font-size3">
+                                    <td colspan="2">{{fifteenData.satisAvg}}%</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="100%" >
+                                        <div id="satisfactionEcharts" ref="satisfactionEcharts"></div>
+                                    </td>
+                                </tr>
+                                <tr class="font-size4">
+                                    <td width="50%">今日满意度</td>
+                                    <td width="50%">{{todayData.satisRate ? todayData.satisRate : 0}}%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </el-col>
+                </el-row>
             </div>
             <div class="second-data">
                 <div class="header-data">
-                    <el-button class="btn-callin" size="samll" plain @click="click_CallInNums">{{btn_CallInNums}}</el-button>
-                    <el-button class="btn-callout" size="samll" plain @click="click_CallOutNums">{{btn_CallOutNums}}</el-button>
+                    <el-button class="btn-callin" size="samll" plain @click="click_CallInNums('CallInNums')"  :class="{btnactive:callTrendAct == 'CallInNums'}">{{btn_CallInNums}}</el-button>
+                    <el-button class="btn-callout" size="samll" plain @click="click_CallOutNums('CallOutNums')"  :class="{btnactive:callTrendAct == 'CallOutNums'}">{{btn_CallOutNums}}</el-button>
                     <div class="header-right">
-                        <div class="select-date" v-for="(item, index) in dateList" :key="item.id">
-                            <el-button class="btn-date" size="mini" plain @click="select_Date(item.name)">{{item.name}}</el-button>
-                        </div>
+                        <el-button 
+                        v-for="(item, index) in dateList" 
+                        :key="item.id" class="btn-date" 
+                        size="mini" 
+                        plain 
+                        @click="select_Date(item.id)"
+                        :class="{btnactive:dateAct == item.id}">{{item.name}}</el-button>
                         <div class="select-picker">
                             <el-date-picker
                                 v-model="dateValue"
+                                disabled
                                 type="datetimerange"
                                 change="select_DateTime"
                                 range-separator="至"
@@ -169,8 +187,8 @@
                             <tbody>
                                 <tr>
                                     <td width="60%" class="footer-fontsize">呼入量排名</td>
-                                    <td width="20%" class="footer-fontsize">渠道</td>
-                                    <td width="15%" class="footer-fontsize">技能组</td>
+                                    <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</td>
+                                    <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</td>
                                 </tr>
                                 <tr v-for="(item, index) in skillGroupsList" :key="item.id">
                                     <td class="footer-fontsize">{{item.id}} {{item.name}}</td>
@@ -186,5 +204,5 @@
 </body>
 <script>
 </script>
-<script src="./TrafficMonitor.js"></script>
+<script src="./trafficMonitor.js"></script>
 </html>

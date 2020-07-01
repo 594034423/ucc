@@ -2,7 +2,17 @@ body {
     background-color:#eff2f6;
     overflow: auto;
 }
-
+.btnactive {
+    color: #409EFF;
+}
+.echart-content {
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 10px;
+    height: 220px;
+}
 .container {
     display: flex;
     padding: 20px;
@@ -14,22 +24,13 @@ body {
     overflow: auto;
 }
 
-.first-data {
-    margin-top: 10px;
-    justify-content: space-between;
-    display: flex;
-}
 .btn-one,.btn-two {
     display: inline-block;
 }
 .btn-one {
     margin-right: 40px;
 }
-.echart-content {
-    width: 22.5%;
-    background-color: #fff;
-    padding: 15px;
-}
+
 table {
     border-spacing: 0;
 }
@@ -89,7 +90,7 @@ table {
     font-size: 18px;
 }
 
-.select-date,.select-picker {
+.select-picker {
     display: inline-block;
 }
 
@@ -99,21 +100,19 @@ table {
 
 .header-data {
     border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
     height: 60px;
 }
 
 .header-right {
     position: relative;
     right: 10px;
-    top: 7px;
 }
 .footer-data {
     display: flex;
     background-color: #fff;
     justify-content: space-between;
     margin-top: 20px;
-    flex: 1;
+    /* flex: 1; */
 }
 .footer-left {
     width: 70%;
@@ -130,19 +129,20 @@ table {
     margin-top: 10px;
     height: 100%;
 }
+
 @media screen  and (max-width:1400px) and (min-width:750px) {
     .font-size1 {
-        font-size: 20px;
+        font-size: 16px;
     }
     .font-size2 {
-        font-size: 14px;
+        font-size: 10px;
         color: rgb(136, 136, 136);
     }
     .font-size3 {
-        font-size: 30px;
+        font-size: 26px;
     }
     .font-size4 {
-        font-size: 20px;
+        font-size: 16px;
     }
 }
 
@@ -152,10 +152,10 @@ table {
         padding: 10px;
         position: relative;
     }
-    .first-data {
+    /* .first-data {
         justify-content: space-around;
         flex-direction: column;
-    }
+    } */
     .font-size1 {
         font-size: 20px;
     }
@@ -202,7 +202,7 @@ table {
     }
 
     #inOutTrendEcharts {
-        height: 160px;
+        height: 200px;
     }
 
     .footer-right {

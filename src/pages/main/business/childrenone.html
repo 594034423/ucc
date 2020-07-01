@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../common/element-ui/css/element.css">
+    <link rel="stylesheet" href="../../../styles/element-ui.css">
+    <link rel="stylesheet" href="./childrenone.css">
+    <script src="../../../common/vue/js/vue.js" type="text/javascript"></script>
+    <script src="../../../common/element-ui/js/element.js" type="text/javascript"></script>
+    <script src="../../../common/vue/js/axios.min.js"></script>
+    
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div style="margin-bottom: 20px;">
+            <el-button
+                size="small"
+                @click="addTab(editableTabsValue)"
+            >
+                add tab
+            </el-button>
+            </div>
+
+            <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
+                <el-tab-pane
+                v-for="(item, index) in editableTabs"
+                :key="item.name"
+                :label="item.title"
+                :name="item.name"
+                >
+                {{item.content}}
+                </el-tab-pane>
+            </el-tabs>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./childrenone.js"></script>
+</html>

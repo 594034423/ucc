@@ -2,7 +2,17 @@ body {
     background-color:#eff2f6;
     overflow: auto;
 }
-
+.btnactive {
+    color: #409EFF;
+}
+.echart-content {
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 10px;
+    height: 220px;
+}
 .container {
     display: flex;
     padding: 20px;
@@ -14,22 +24,13 @@ body {
     overflow: auto;
 }
 
-.first-data {
-    margin-top: 10px;
-    justify-content: space-between;
-    display: flex;
-}
 .btn-one,.btn-two {
     display: inline-block;
 }
 .btn-one {
     margin-right: 40px;
 }
-.echart-content {
-    width: 22.5%;
-    background-color: #fff;
-    padding: 15px;
-}
+
 table {
     border-spacing: 0;
 }
@@ -113,7 +114,6 @@ table {
     background-color: #fff;
     justify-content: space-between;
     margin-top: 20px;
-    flex: 1;
 }
 .footer-left {
     width: 70%;
@@ -130,20 +130,73 @@ table {
     margin-top: 10px;
     height: 100%;
 }
+/*three-data*/
+.three-data {
+    /* display: flex;
+    flex-wrap: row wrap; */
+    height: 300px;
+}
+.echart-content3 {
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 10px; 
+    height: inherit;
+    flex: 1;
+}
+.three-left,.three-right {
+    height: 100%;
+    background-color: #fff;
+    margin-top: 10px;
+    width: 100%
+}
+.three-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.three-left-header,.three-right-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+}
+.three-left-header>span {
+    line-height: inherit;
+}
+.three-right-header>span {
+    padding: 11.5px;
+}
+.btn-trans-date {
+    border: none;
+}
+.three-left-content>table {
+    padding: 10px 10px 0 10px;
+}
+.three-right-content {
+    flex: 1;
+}
+#transactionTypeEcharts {
+    height: 271px
+}
+
 @media screen  and (max-width:1400px) and (min-width:750px) {
     .font-size1 {
-        font-size: 20px;
+        font-size: 16px;
     }
     .font-size2 {
-        font-size: 14px;
+        font-size: 10px;
         color: rgb(136, 136, 136);
     }
     .font-size3 {
-        font-size: 30px;
+        font-size: 28px;
     }
     .font-size4 {
-        font-size: 20px;
+        font-size: 16px;
     }
+    
 }
 
 @media screen and (max-width:750px)
@@ -190,7 +243,6 @@ table {
         display: none;
     }
     
-
     .footer-data {
         flex-direction: column;
         margin-top: 6px;
@@ -202,7 +254,7 @@ table {
     }
 
     #transactionTrendEcharts {
-        height: 160px;
+        height: 200px;
     }
 
     .footer-right {
@@ -218,6 +270,16 @@ table {
     .footer-nums {
         font-size: 12px;
         padding: 4px 0;
+    }
+    
+    /* .three-data {
+        flex-direction: column;
+    } */
+    .three-left,.three-right {
+        width: 100%;
+    }
+    #transactionTypeEcharts {
+        height: 271px;
     }
 }
 
