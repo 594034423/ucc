@@ -84,7 +84,12 @@
                                 </tr>
                                 <tr height="60px" class="font-size3">
                                     <td>{{todayData.answerNum}}</td>
-                                    <td>{{(todayData.answerNum/todayData.joinQueryNum).toFixed(2)}}%</td>
+                                    <td v-if="todayData.answerNum != 0 && todayData.joinQueryNum !=0">
+                                        {{(todayData.answerNum/todayData.joinQueryNum).toFixed(2)}}%
+                                    </td>
+                                    <td else>
+                                        0%
+                                    </td>
                                 </tr>
                                 <tr height="90px" class="font-size4">
                                     <td width="60%">今日平均排队时长</td>
@@ -152,8 +157,8 @@
             </div>
             <div class="second-data">
                 <div class="header-data">
-                    <el-button class="btn-callin" size="samll" plain @click="click_CallInNums('CallInNums')"  :class="{btnactive:callTrendAct == 'CallInNums'}">{{btn_CallInNums}}</el-button>
-                    <el-button class="btn-callout" size="samll" plain @click="click_CallOutNums('CallOutNums')"  :class="{btnactive:callTrendAct == 'CallOutNums'}">{{btn_CallOutNums}}</el-button>
+                    <el-button class="btn-callin" size="samll" plain @click="click_CallInNums('I')"  :class="{btnactive:callTrendAct == 'I'}">{{btn_CallInNums}}</el-button>
+                    <el-button class="btn-callout" size="samll" plain @click="click_CallOutNums('O')"  :class="{btnactive:callTrendAct == 'O'}">{{btn_CallOutNums}}</el-button>
                     <div class="header-right">
                         <el-button 
                         v-for="(item, index) in dateList" 
@@ -183,16 +188,22 @@
                         </div>
                     </div>
                     <div class="footer-right">
-                        <table height="100%" width="100%">
+                        <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td width="60%" class="footer-fontsize">呼入量排名</td>
+                                    <td width="60%" class="footer-fontsize">{{inOutTrend}}</td>
                                     <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</td>
                                     <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</td>
                                 </tr>
-                                <tr v-for="(item, index) in skillGroupsList" :key="item.id">
-                                    <td class="footer-fontsize">{{item.id}} {{item.name}}</td>
-                                    <td colspan="2" class="footer-nums">{{item.nums}}</td>
+                                <tr v-if="trendList.mark == 'ChannelList'" v-for="(item, index) in trendList.channelList" :key="item.index">
+                                    <td class="footer-fontsize">{{index+1}}. {{item.channelNo}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.joinQueryNum}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.callOutNum}}</td>
+                                </tr>
+                                <tr v-if="trendList.mark == 'SkillGroupsList'" v-for="(item, index) in trendList.skillGroupsList" :key="item.index">
+                                    <td class="footer-fontsize" >{{index+1}}. {{item.skillGroupCode}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.joinQueryNum}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.callOutNum}}</td>
                                 </tr>
                             </tbody>
                         </table>

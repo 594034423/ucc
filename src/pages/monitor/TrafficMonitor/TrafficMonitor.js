@@ -23,7 +23,7 @@ var vm = new Vue({
         outRank: '呼出量排名',
         channelAct:'AllChannels',           //渠道控制点击按钮样式
         skillGroupsAct: 'AllSkillGroups',   //技能组控制点击按钮
-        callTrendAct: 'CallInNums',             //呼入按钮点击控制
+        callTrendAct: 'I',                  //呼入按钮点击控制 I-呼入 O呼出
         listAct: 'ChannelList',             //列表按钮点击控制
         dateAct:'D',                        //时间按钮控制
         todayData: {},                      //今日数据
@@ -36,6 +36,8 @@ var vm = new Vue({
             callTrend_X:[],       //呼入呼出量趋势X轴数组   --柱形图
             callTrend_Y:[],       //呼入呼出量趋势Y轴数组
         },
+        beginTime:null,
+        endTime:null,
         channelList: [
             {name: '手机银行', id: '1', nums: 1000},
             {name: '官方公众号', id: '2', nums: 1000},
@@ -60,6 +62,11 @@ var vm = new Vue({
             {name: '本月', id: 'M'},
             {name: '全年', id: 'Y'},
         ],
+        trendList: {
+            mark:'ChannelList',         //列表标志,判断显示渠道还是技能珠
+            channelList:[],
+            skillGroupsList:[]
+        },
         // DateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         dateValue: '',  //时间选择器时间
         isAct: true
@@ -67,6 +74,8 @@ var vm = new Vue({
     created(){
 
         var that = this;
+        //存点击事件
+        that.localStorageFn()
         // //先获取数据
         that._getVideoCallToday() //今日呼入量和满意度
         // window.setInterval(()=>{
@@ -80,8 +89,10 @@ var vm = new Vue({
         //     setTimeout(that._getVideoCallHistory(),0)
         // },3600*24)
 
-        //存点击事件
-        that.localStorageFn()
+
+        // 15天呼叫趋势 --日期
+        that._getVideoCallByDateType()
+
 
     },
     mounted(){
@@ -97,9 +108,11 @@ var vm = new Vue({
         })
     },
     updated(){
-        this.satisfactionEcharts()
-        this.callInNumsEcharts();
-        this.inOutTrendEcharts();
+
+            this.satisfactionEcharts()
+            this.callInNumsEcharts();
+            this.inOutTrendEcharts();
+        
     },
     watch: {
         // 监控时间选择器的日期选择
@@ -120,6 +133,7 @@ var vm = new Vue({
             sessionStorage.setItem('dateIndex',this.dateAct)
             //渠道-技能组列表数据
             sessionStorage.setItem('listAct', this.listAct)
+
         },
         // 点击全部渠道
         click_AllChannels(index){
@@ -152,21 +166,24 @@ var vm = new Vue({
         // 点击呼入量
         click_CallInNums(index){
             console.log(index)
-            sessionStorage.setItem('callNumsIndex',index)
             this.inOutTrend = this.inTrend
             this.callTrendAct = index;
+            sessionStorage.setItem('callTrendIndex',index)
+            this._getVideoCallByDateType()
         },
         // 点击呼出量
         click_CallOutNums(index){
             console.log(index)
             this.inOutTrend = this.outTrend
             this.callTrendAct = index
-            sessionStorage.setItem('callNumsIndex',index)
+            sessionStorage.setItem('callTrendIndex',index)
+            this._getVideoCallByDateType()
         },
         select_Date(index) {
             sessionStorage.setItem('dateIndex',index)
             this.dateAct = index
             console.log(index)
+            this._getVideoCallByDateType();
         },
         select_DateTime() {
             console.log(111)
@@ -175,12 +192,12 @@ var vm = new Vue({
         click_List(index){
             this.listAct = index
             sessionStorage.setItem('listAct',this.listAct)
+            this.trendList.mark = this.listAct
             console.log(this.listAct)
         },
         //满意度 --曲线图
         satisfactionEcharts(){
             // console.log(this.$refs.satisfactionEcharts)
-            console.log(this.echartData.satisRateList,'满意度曲线图')
             var dom = this.$refs.satisfactionEcharts;
             this.satisfactionContainer = echarts.init(dom)
             var option = {
@@ -209,7 +226,7 @@ var vm = new Vue({
                     top: 1
                 },
                 series: [{
-                    name: '满意度',
+                    name: '满意数',
                     type: 'line',
                     data: this.echartData.satisRate_Y,
                     smooth: true,
@@ -229,7 +246,6 @@ var vm = new Vue({
         //呼入量 --柱形图
         callInNumsEcharts(){
             // console.log(this.$refs.callInNumsEcharts)
-            console.log(this.echartData.satisRateList,'呼入呼出量柱形')
             var dom = this.$refs.callInNumsEcharts;
             this.callInNumsContainer = echarts.init(dom);
             var option = {
@@ -322,15 +338,15 @@ var vm = new Vue({
             }
         },
 
-        tabBtn(index) {
-            console.log(11)
-        },
+        // tabBtn(index) {
+        //     console.log(11)
+        // },
 
         //获取今日呼入量和满意度 --5s刷新一次
-        _getVideoCallToday(channelNo,skillGroupCode){
+        _getVideoCallToday(){
             getVideoCallToday({
-                channelNo: channelNo,
-                skillGroupCode: skillGroupCode
+                // channelNo: channelNo,
+                // skillGroupCode: skillGroupCode
             })
             .then(res => {
                 this.todayData = res.bean
@@ -351,21 +367,26 @@ var vm = new Vue({
                 skillGroupCode: skillGroupCode
             })
             .then(res => {
+                console.log(res,'今15天呼入量和满意度')
                 this.fifteenData = res.map
-                var satisRateTemp = []
-                var joinQueryTemp = []
-                var rowTemp = []
+                var satisRateTemp_X = [] 
+                var satisRateTemp_Y = []
+                var joinQueryTemp_X = []
+                var joinQueryTemp_Y = []
                 for(let i = 0; i < res.rows.length; i++){
-                    satisRateTemp.push(res.rows[i].satisNum)
-                    joinQueryTemp.push(res.rows[i].joinQueryNum)
-                    rowTemp.push(i)
+                    satisRateTemp_Y.push(res.rows[i].satisNum)
+                    joinQueryTemp_Y.push(res.rows[i].joinQueryNum)
+                    satisRateTemp_X.push("第"+i+"组")
+                    joinQueryTemp_X.push("第"+i+"组")
                 }
-                this.echartData.satisRateList = satisRateTemp
-                this.echartData.joinQueryList = joinQueryTemp
-                this.echartData.rowsList = rowTemp
-                satisRateTemp = []
-                joinQueryTemp = []
-                rowTemp = []
+                this.echartData.satisRate_X = satisRateTemp_X
+                this.echartData.satisRate_Y = satisRateTemp_Y
+                this.echartData.joinQueryNum_X = joinQueryTemp_X
+                this.echartData.joinQueryNum_Y = joinQueryTemp_Y
+                joinQueryTemp_X = []
+                joinQueryTemp_Y = []
+                satisRateTemp_X = []
+                satisRateTemp_Y = []
             })
             .catch(err => {
                 console.log(err,'数据获取异常')
@@ -373,26 +394,166 @@ var vm = new Vue({
         },
         
         //今日呼入量和满意度 -日期 --15s刷新一次
-        _getVideoCallByDateType(channelNo,skillGroupCode,queryTimeType,queryCallType,beginTime,endTime){
+        _getVideoCallByDateType(){
+            var channelIndex =  sessionStorage.getItem('channelIndex');
+            var skillGroupIndex =  sessionStorage.getItem('skillGroupIndex');
+            var callTrendIndex =  sessionStorage.getItem('callTrendIndex');
+            var dateIndex =  sessionStorage.getItem('dateIndex');
+            switch(dateIndex){
+                case 'D':
+                    this.beginTime = this.getDay('D');
+                    this.endTime = this.getDay('D');
+                    break;
+                case 'W':
+                    this.beginTime = this.getDay('W').weekFirstDay;
+                    this.endTime = this.getDay('W').weekLastDay;
+                    console.log(this.beginTime)
+                    console.log(this.endTime);
+                    break;
+                case 'M':
+                    this.beginTime = this.getDay('M');
+                    this.endTime = this.getDay('D')
+                    break;
+                case 'Y':
+                    this.beginTime = this.getDay('Y')
+                    this.endTime = this.getDay('D')
+            }
             getVideoCallByDateType({
-                channelNo: channelNo,
-                skillGroupCode: skillGroupCode,
-                queryTimeType: queryTimeType,
-                queryCallType: queryCallType,
-                beginTime: beginTime,
-                endTime: endTime
-                
+                channelNo: channelIndex,
+                skillGroupCode: skillGroupIndex,
+                queryTimeType: dateIndex,
+                queryCallType: callTrendIndex,
+                beginTime: this.beginTime,
+                endTime: this.endTime
             })
             .then(res => {
+                var callTrend_X = [];
+                var callTrend_Y = [];
+                switch(dateIndex) {
+                    case 'D':
+                        // this.callTrend_X = [
+                        //     '00:00', '01:00', '02:00', '03:00',
+                        //     '04:00', '05:00', '06:00', '07:00', 
+                        //     '08:00', '09:00', '10:00', '11:00', 
+                        //     '12:00', '13:00', '14:00', '14:00',
+                        //     '15:00', '16:00', '17:00', '18:00', 
+                        //     '19:00', '20:00', '21:00', '22:00',
+                        //     '23:00', '24:00'     
+                        // ]
+                        for(var i = 0; i < 25; i++){
+                            if(i<10){
+                                callTrend_X.push('0'+i+':00')
+                            }
+                            if(i>10){
+                                callTrend_X.push(i+':00')
+                            }
+                        }
+                        callTrend_Y = Array(24).fill('')
+                        break;
+                    case 'W':
+                        // this.callTrend_X = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+                        for(var i = 0; i < 7; i++){
+                            callTrend_X.push('星期'+(i+1))
+                        }
+                        callTrend_Y = Array(7).fill('')
+                        break;
+                    case 'M':
+                        //查看本月有多少天
+                        var dayNum = new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+                        callTrend_Y = Array(dayNum).fill('')
+                        for(var i = 0; i < dayNum; i++){
+                            callTrend_X.push((i+1)+'号')
+                        }
+                        break;
+                    case 'Y':
+                        callTrend_Y = Array(12).fill('')
+                        for(var i = 0; i < 12; i++){
+                            callTrend_X.push((i+1)+'月')
+                        }
+                }
+
+                this.echartData.callTrend_X = callTrend_X
                 
+                if(callTrendIndex == 'I'){
+                    console.log(callTrend_Y)
+                    for(var i = 0; i < res.rows.length; i++){
+                        callTrend_Y.splice(res.rows[i].beginTime-1,1,res.rows[i].joinQueryNum)
+                        console.log(res.rows[i].beginTime)
+                    }
+                    this.echartData.callTrend_Y = callTrend_Y
+                    callTrend_Y = []
+                }else {
+                    console.log(callTrend_Y,11)
+                    for(var i = 0; i < res.rows.length; i++){
+                        callTrend_Y.splice(res.rows[i].beginTime-1,1,res.rows[i].callOutNum)
+                        console.log(callTrend_Y)
+                    }
+                    this.echartData.callTrend_Y = callTrend_Y
+                    callTrend_Y = []
+                }
+                callTrend_X = []
+                // console.log(this.echartData.callTrend_X,3)
+                // console.log(this.echartData.callTrend_Y,4)
+                this.trendList.channelList = res.map.channelCallIn
+                this.trendList.skillGroupsList = res.map.skillCallIn
+                console.log(this.trendList.channelList,1111111)
+                console.log(this.trendList.skillGroupsList,222222)
             })
             .catch(err => {
                 console.log(err,'数据获取异常')
             })
         },
 
-        refreshEcharts(){
+        //获取时间数据   'D'-今日, 'W'-本周第一日, 'M'-本月第一日, 'Y'-今年第一日
+        getDay(param) {
+            var date = new Date();
+            var year = date.getFullYear();//年
+            var month = date.getMonth()+1;//月
+            var day = date.getDate();//日
 
-        }
+            var weekFirstDay = new Date(date-(date.getDay()-1)*86400000).getDate(); //本周第一天
+            M = Number(new Date(date-(date.getDay()-1)*86400000).getMonth())+1  //本周第一天所在的月份的月份
+
+            var weekLastDay = new Date((new Date(date-(date.getDay()-1)*86400000)/1000+6*86400)*1000).getDate();  //本周最后一天
+            L = Number(new Date((new Date(date-(date.getDay()-1)*86400000)/1000+6*86400)*1000).getMonth())+1
+
+            var monthFirstDay = new Date(date.getFullYear(),date.getMonth(),1).getDate(); //本月第一天
+            var yearFirstDaty = `${year}-01-01`   
+            if(month < 10) {
+                month = "0" + month;
+            }
+            if(day < 10) {
+                day = "0" + day;
+            }
+            if(weekFirstDay < 10){
+                weekFirstDay = "0" + weekFirstDay
+            }
+            if(weekLastDay < 10){
+                weekLastDay = "0" + weekLastDay
+            }
+            if(monthFirstDay < 10) {
+                monthFirstDay = "0" + monthFirstDay
+            }
+            if(M < 10) {
+                M = "0" + M
+            }
+            if(L < 10) {
+                L = "0" + L
+            }
+            
+            switch(param) {
+                case 'D':
+                    return `${year}-${month}-${day}`
+                case 'W':
+                    return {weekFirstDay:`${year}-${M}-${weekFirstDay}`,weekLastDay:`${year}-${L}-${weekLastDay}`}
+                case 'M':
+                    return `${year}-${month}-${monthFirstDay}`
+                case 'Y':
+                    return yearFirstDaty
+                default:
+                    return `${year}-${month}-${day}`
+            }
+        },
+
     }
 })
