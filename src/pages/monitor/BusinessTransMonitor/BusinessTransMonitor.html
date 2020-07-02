@@ -54,10 +54,10 @@
                                         <td width="30%">成功率</td>
                                         <td width="20%" style="color: #00c700;">99%</td>
                                     </tr>
-                                    <tr height="60px" class="font-size3">
+                                    <tr height="45px" class="font-size3">
                                         <td colspan="3">12123123</td>
                                     </tr>
-                                    <tr height="90px" class="font-size4">
+                                    <tr height="50px" class="font-size4">
                                         <td colspan="3">
                                             <span>周同比 12%<i class="el-icon-caret-top" style="color: red;"></i></span>
                                             <span style="margin-left: 20px;">日同比 12% <i style="color:#00c700" class="el-icon-caret-bottom"></i></span>
@@ -81,7 +81,7 @@
                                         <td width="80%">交易峰值</td>
                                         <td class="font-size2">(单位/日)</td>
                                     </tr>
-                                    <tr height="60px" class="font-size3">
+                                    <tr height="40px" class="font-size3">
                                         <td colspan="2">6,246</td>
                                     </tr>
                                     <tr>
@@ -89,7 +89,7 @@
                                             <div id="transactionPeakEcharts" ref="transactionPeakEcharts"></div>
                                         </td>
                                     </tr>
-                                    <tr class="font-size4">
+                                    <tr class="font-size4" height="30px">
                                         <td width="50%">今日交易峰值</td>
                                         <td width="50%">9623</td>
                                     </tr>
@@ -106,7 +106,7 @@
                                         <td width="80%">交易成功率</td>
                                         <td class="font-size2">(单位/日)</td>
                                     </tr>
-                                    <tr height="60px" class="font-size3">
+                                    <tr height="40px" class="font-size3">
                                         <td colspan="2">98%</td>
                                     </tr>
                                     <tr>
@@ -114,7 +114,7 @@
                                             <div id="transactionRateEcharts" ref="transactionRateEcharts"></div>
                                         </td>
                                     </tr>
-                                    <tr class="font-size4">
+                                    <tr class="font-size4" height="30px">
                                         <td width="50%">今日交易成功率</td>
                                         <td width="50%">96%</td>
                                     </tr>
@@ -131,7 +131,7 @@
                                         <td width="80%">线下业务交易量</td>
                                         <td class="font-size2">(单位/日)</td>
                                     </tr>
-                                    <tr height="60px" class="font-size3">
+                                    <tr height="40px" class="font-size3">
                                         <td>640</td>
                                     </tr>
                                     <tr>
@@ -139,7 +139,7 @@
                                             <div id="transactionNumsEcharts" ref="transactionNumsEcharts"></div>
                                         </td>
                                     </tr>
-                                    <tr class="font-size4">
+                                    <tr class="font-size4" height="30px">
                                         <td width="50%">今日交易量</td>
                                         <td>1,834</td>
                                     </tr>
@@ -162,6 +162,7 @@
                             <el-date-picker
                                 v-model="dateValue"
                                 type="datetimerange"
+                                disabled=""
                                 change="select_DateTime"
                                 range-separator="至"
                                 start-placeholder="开始日期"
@@ -181,9 +182,9 @@
                         <table height="100%" width="100%">
                             <tbody>
                                 <tr>
-                                    <td width="60%" class="footer-fontsize">交易量排名</td>
-                                    <td width="20%" class="footer-fontsize">渠道</td>
-                                    <td width="15%" class="footer-fontsize">技能组</td>
+                                    <td width="60%" class="footer-fontsize">{{trend}}</td>
+                                    <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</el-button></td>
+                                    <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</el-button></td>
                                 </tr>
                                 <tr v-for="(item, index) in channelList" :key="item.id">
                                     <td class="footer-fontsize">{{item.id}} {{item.name}}</td>

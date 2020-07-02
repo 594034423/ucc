@@ -44,21 +44,33 @@ var vm = new Vue({
 
     },
     created(){
-        this.onload()
+        this._getAllLabelTreeGrid()
     },
     methods: {
         handleNodeClick(data) {
             console.log(data.$treeNodeId);
         },
-        onload(){
-            axios.get('http://192.168.0.80/uomp/businessLabel/getAllLabelTreeGrid?labelType=business')
+
+        _getAllLabelTreeGrid(){
+            getAllLabelTreeGrid({labelType:'business'})
             .then(res => {
+                console.log(res.data.rows[0].text)
                 this.tree[0].label = res.data.rows[0].text
-                console.log(res.data.rows[0])
             })
             .catch(err => {
-                console.log(222);
+                console.log(222)
             })
         }
+
+        // onload(){
+        //     axios.get('http://192.168.0.80/uomp/businessLabel/getAllLabelTreeGrid?labelType=business')
+        //     .then(res => {
+        //         this.tree[0].label = res.data.rows[0].text
+        //         console.log(res.data.rows[0])
+        //     })
+        //     .catch(err => {
+        //         console.log(222);
+        //     })
+        // }
     },
 })

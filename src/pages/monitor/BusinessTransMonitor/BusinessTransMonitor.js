@@ -21,9 +21,10 @@ var vm = new Vue({
         transactionTrend: '交易量趋势',
         successRateTrend: '成功率趋势',
         transactionRank: '交易量排名',
-        channelAct:'AllChannels',     //渠道控制点击按钮样式
-        skillGroupAct: 'AllSkillGroups',   //技能组控制点击按钮
-        trendAct: 'TransactionNums',     //呼入按钮点击控制
+        channelAct:'AllChannels',           //渠道控制点击按钮样式
+        skillGroupAct: 'AllSkillGroups',    //技能组控制点击按钮
+        trendAct: 'TransactionNums',        //交易量按钮点击控制
+        listAct:'ChannelList',
         dateAct:'D', 
         transAct: 'D',
         channelList: [
@@ -63,19 +64,30 @@ var vm = new Vue({
         // DateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         dateValue: '',  //时间选择器时间
         isAct: true,
+        trendList: {
+            mark:'ChannelList',         //列表标志,判断显示渠道还是技能组
+            channelList:[],
+            skillGroupsList:[]
+        },
         transDateList: [
             {name: '今日', id: 'D'},
             {name: '近15分钟', id: 'F'},
         ],
     },
+    careted(){
+        let that = this;
+        that.localStorageFn();
+    },
     mounted(){
         // Echart 缩放
         let _this = this;
-        _this.transactionRateEcharts();
-        _this.transactionNumsEcharts();
-        _this.transactionTrendEcharts();
-        _this.transactionPeakEcharts();
-        _this.transactionTypeEcharts();
+        _this.$nextTick(()=>{
+            _this.transactionRateEcharts();
+            _this.transactionNumsEcharts();
+            _this.transactionTrendEcharts();
+            _this.transactionPeakEcharts();
+            _this.transactionTypeEcharts();
+        })
         window.addEventListener('resize', function () { 
             if (_this.resizeTimer) clearTimeout(_this.resizeTimer);
                 _this.resizeTimer = setTimeout(function () {
@@ -87,21 +99,9 @@ var vm = new Vue({
             }, 100)
         })
 
-        setTimeout(() =>{
-            this.refreshtransactionRateEcharts()
-        },2000)
-        setTimeout(() =>{
-            this.refreshTransactionNumsEcharts()
-        },2000)
-        setTimeout(() =>{
-            this.refreshTransactionTrendEcharts()
-        },2000)
-        setTimeout(() =>{
-            this.refreshTransactionPeakEcharts()
-        },2000)
-        setTimeout(()=> {
-            this.refreshTransactionTypeEcharts();
-        },2000)
+    },
+    updated(){
+        let _this = this;
     },
     watch: {
         // 监控时间选择器的日期选择
@@ -110,6 +110,18 @@ var vm = new Vue({
         }
     },
     methods: {
+        localStorageFn(){
+            //渠道      channnelIndex -> AllChannel, Channel
+            sessionStorage.setItem('channelIndex',this.channelAct)
+            //技能组    skillGroupsIndex -> AllSkillGroups, SkillGroups
+            sessionStorage.setItem('skillGroupsIndex',this.skillGroupsAct)
+            //呼叫趋势    callTrendIndex -> I, O
+            sessionStorage.setItem('callTrendIndex',this.callTrendAct)
+            //日周月年选择  dateIndex -> D, W, M, Y
+            sessionStorage.setItem('dateIndex',this.dateAct)
+            //渠道-技能组列表数据   listAct ->  ChannelList, SkillGroupsList
+            sessionStorage.setItem('listAct', this.listAct)
+        },
         // 点击全部渠道
         click_AllChannels(index){
             this.channelAct = index
@@ -134,8 +146,8 @@ var vm = new Vue({
         },
 
         //选择单一业务组
-        select_SkillGroups(name) {
-            this.btn_SkillGroups = name
+        select_SkillGroups(index) {
+            this.btn_SkillGroups = index
             this.skillGroupAct = 'SkillGroups'
             sessionStorage.setItem('skillGroupIndex', this.skillGroupAct)
             console.log(this.skillGroupAct)
@@ -143,7 +155,7 @@ var vm = new Vue({
 
         // 点击交易量
         click_TransactionNums(index){
-            console.log(this.btn_TransactionNums)
+            console.log(index)
             this.trend = this.transactionTrend
             this.trendAct = index
             console.log(index)
@@ -151,20 +163,26 @@ var vm = new Vue({
         },
         // 点击成功率
         click_SuccessRate(index){
-            console.log(this.btn_SuccessRate)
+            console.log(index)
             this.trend = this.successRateTrend
             this.trendAct = index
             console.log(index)
             sessionStorage.setItem('trendIndex', this.trendAct)
         },
-
+        
         select_Date(index) {
-            console.log(index)
+            console.log('点击了:'+index)
             this.dateAct = index
             sessionStorage.setItem('dateIndex',index)
         },
         select_DateTime() {
             console.log(111)
+        },
+        click_List(index){
+            this.listAct = index
+            sessionStorage.setItem('listAct',this.listAct)
+            this.trendList.mark = this.listAct
+            console.log(this.listAct)
         },
         click_TransDate(index) {
             console.log(index)
@@ -174,7 +192,7 @@ var vm = new Vue({
 
         //交易成功率--曲线图
         transactionRateEcharts(){
-            console.log(this.$refs.transactionRateEcharts)
+            // console.log(this.$refs.transactionRateEcharts)
             var dom = this.$refs.transactionRateEcharts;
             this.transactionRateContainer = echarts.init(dom)
             var option = {

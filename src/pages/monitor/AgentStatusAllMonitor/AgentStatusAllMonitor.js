@@ -80,8 +80,9 @@ var vm = new Vue({
                 },
                 legend: {
                     orient: 'vertical',
-                    left: '55%',
-                    top:'20%',
+                    left: '50%',
+                    top:'15%',
+                    itemGap:8,
                     textStyle: {
                         fontSize: 14,
                         lineHeight: 14,
@@ -94,7 +95,7 @@ var vm = new Vue({
                                 width: 65
                             },
                             value: {
-                                fontSize:16,
+                                fontSize:14,
                                 align:'center',
                             }
                         }
@@ -112,7 +113,7 @@ var vm = new Vue({
                     {
                         name: '',
                         type: 'pie',
-                        radius: ['50%', '65%'],
+                        radius: ['50%', '70%'],
                         center: ['25%', '50%'],
                         // avoidLabelOverlap: false,
                         label: {
@@ -167,9 +168,9 @@ var vm = new Vue({
                 },
                 legend: {
                     orient: 'vertical',
-                    left: '55%',
-                    top:'20%',
-                    itemWidth: 28,
+                    left: '50%',
+                    top:'15%',
+                    itemGap:8,
                     textStyle: {
                         fontSize: 14,
                         lineHeight: 14,
@@ -198,7 +199,7 @@ var vm = new Vue({
                     {
                         name: '',
                         type: 'pie',
-                        radius: ['50%', '65%'],
+                        radius: ['50%', '70%'],
                         center: ['25%', '50%'],
                         avoidLabelOverlap: false,
                         label: {

@@ -11,7 +11,7 @@ body {
     box-sizing: border-box;
     padding: 10px;
     margin-top: 10px;
-    height: 220px;
+    height: 160px;
 }
 .container {
     display: flex;
@@ -35,20 +35,20 @@ table {
     border-spacing: 0;
 }
 .font-size1 {
-    font-size: 26px;
+    font-size: 16px;
 }
 .font-size2 {
-    font-size: 16px;
+    font-size: 10px;
     color: rgb(136, 136, 136);
 }
 .font-size3 {
-    font-size: 34px;
+    font-size: 28px;
 }
 .font-size4 {
-    font-size: 24px;
+    font-size: 16px;
 }
 #transactionRateEcharts, #transactionNumsEcharts,#transactionPeakEcharts{
-    height: 80px;
+    height: 40px;
     width: 100%;
     padding-bottom: 10px;
     border-bottom: 1px solid #ccc;
@@ -100,14 +100,14 @@ table {
 
 .header-data {
     border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
+    /* padding-bottom: 10px; */
     height: 60px;
 }
 
 .header-right {
     position: relative;
     right: 10px;
-    top: 7px;
+    /* top: 7px; */
 }
 .footer-data {
     display: flex;
@@ -181,6 +181,10 @@ table {
 #transactionTypeEcharts {
     height: 271px
 }
+.footer-fontsize {
+    border: none;
+    font-size: 16px;
+}
 
 @media screen  and (max-width:1400px) and (min-width:750px) {
     .font-size1 {
@@ -203,7 +207,7 @@ table {
 {
     .container {
         padding: 10px;
-        position: relative;
+        /* position: relative; */
     }
     .first-data {
         justify-content: space-around;
@@ -237,7 +241,7 @@ table {
         font-size: 12px;
     }
     .header-data {
-        height: 30px;
+        height: 35px;
     }
     .header-right {
         display: none;

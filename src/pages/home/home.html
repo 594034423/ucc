@@ -29,7 +29,8 @@
                   </el-menu-item>
                   <el-menu-item
                   v-for="item in navList"
-                  :index="item.index">
+                  :index="item.index"
+                  :key="item.index">
                     <i :class="item.icon"></i>
                     <span slot="title">{{item.title}}</span>
                   </el-menu-item>

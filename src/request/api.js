@@ -14,3 +14,6 @@ const getVideoCallToday = p => get('/mrc/mrcMonitorVideo/getVideoCallToday', p)
 
 //今日呼入量和满意度 -日期
 const getVideoCallByDateType = p => get('/mrc/mrcMonitorVideo/getVideoCallByDateType', p)
+
+//获取渠道和技能组信息
+const getSkillAndChannel = p => get('/mrc/mrcMonitorVideo/getSkillAndChannel', p)

@@ -57,17 +57,17 @@
                                     <td width="50%">当前排队数</td>
                                     <td width="40%">当前通话数</td>
                                 </tr>
-                                <tr height="60px" class="font-size3">
+                                <tr height="45px" class="font-size3">
                                     <td>{{todayData.currentLineUpWatiNum}}</td>
                                     <td>{{todayData.talkingNum}}</td>
                                 </tr>
-                                <tr height="90px" class="font-size4">
+                                <tr height="50px" class="font-size4">
                                     <td width="60%">当前平均排队时长</td>
-                                    <td style="color: #00c700;">{{todayData.currentLineUpWatiAvgTime}}s</td>
+                                    <td style="color: #00c700;">{{todayData.currentLineUpWatiAvgTime}}秒</td>
                                 </tr>
                                 <tr class="font-size4">
                                     <td width="60%">当前平均通话时长</td>
-                                    <td>{{todayData.currentTalkAvgTime}}s</td>
+                                    <td>{{todayData.currentTalkAvgTime}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -82,7 +82,7 @@
                                     <td width="50%">今日应答数</td>
                                     <td width="40%">今日应答率</td>
                                 </tr>
-                                <tr height="60px" class="font-size3">
+                                <tr height="45px" class="font-size3">
                                     <td>{{todayData.answerNum}}</td>
                                     <td v-if="todayData.answerNum != 0 && todayData.joinQueryNum !=0">
                                         {{(todayData.answerNum/todayData.joinQueryNum).toFixed(2)}}%
@@ -91,13 +91,13 @@
                                         0%
                                     </td>
                                 </tr>
-                                <tr height="90px" class="font-size4">
+                                <tr height="50px" class="font-size4">
                                     <td width="60%">今日平均排队时长</td>
-                                    <td style="color: #00c700;">{{todayData.lineUpWatiAvgTime}}s</td>
+                                    <td style="color: #00c700;">{{todayData.lineUpWatiAvgTime}}秒</td>
                                 </tr>
                                 <tr class="font-size4">
                                     <td width="60%">今日平均通话时长</td>
-                                    <td>{{todayData.talkAvgTime}}s</td>
+                                    <td>{{todayData.talkAvgTime}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,7 +112,7 @@
                                     <td>呼入量</td>
                                     <td class="font-size2">(单位/日)</td>
                                 </tr>
-                                <tr height="60px" class="font-size3">
+                                <tr height="40px" class="font-size3">
                                     <td>{{fifteenData.joinQueryTotal}}</td>
                                 </tr>
                                 <tr>
@@ -120,7 +120,7 @@
                                         <div id="callInNumsEcharts" ref="callInNumsEcharts"></div>
                                     </td>
                                 </tr>
-                                <tr class="font-size4">
+                                <tr class="font-size4" height="30px">
                                     <td width="50%">今日呼入量</td>
                                     <td width="50%">{{todayData.joinQueryNum}}</td>
                                 </tr>
@@ -137,7 +137,7 @@
                                     <td>满意度</td>
                                     <td class="font-size2">(单位/日)</td>
                                 </tr>
-                                <tr height="60px" class="font-size3">
+                                <tr height="40px" class="font-size3">
                                     <td colspan="2">{{fifteenData.satisAvg}}%</td>
                                 </tr>
                                 <tr>
@@ -145,7 +145,7 @@
                                         <div id="satisfactionEcharts" ref="satisfactionEcharts"></div>
                                     </td>
                                 </tr>
-                                <tr class="font-size4">
+                                <tr class="font-size4" height="30px">
                                     <td width="50%">今日满意度</td>
                                     <td width="50%">{{todayData.satisRate ? todayData.satisRate : 0}}%</td>
                                 </tr>
@@ -192,18 +192,18 @@
                             <tbody>
                                 <tr>
                                     <td width="60%" class="footer-fontsize">{{inOutTrend}}</td>
-                                    <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</td>
-                                    <td width="20%" style="cursor: pointer;" class="footer-fontsize" :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</td>
+                                    <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</el-button></td>
+                                    <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</el-button></td>
                                 </tr>
                                 <tr v-if="trendList.mark == 'ChannelList'" v-for="(item, index) in trendList.channelList" :key="item.index">
-                                    <td class="footer-fontsize">{{index+1}}. {{item.channelNo}}</td>
-                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.joinQueryNum}}</td>
-                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.callOutNum}}</td>
+                                    <td class="footer-fontsize">{{index+1}}. {{item.value}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.code}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.code}}</td>
                                 </tr>
                                 <tr v-if="trendList.mark == 'SkillGroupsList'" v-for="(item, index) in trendList.skillGroupsList" :key="item.index">
-                                    <td class="footer-fontsize" >{{index+1}}. {{item.skillGroupCode}}</td>
-                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.joinQueryNum}}</td>
-                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.callOutNum}}</td>
+                                    <td class="footer-fontsize" >{{index+1}}. {{item.value}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.code}}</td>
+                                    <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.code}}</td>
                                 </tr>
                             </tbody>
                         </table>
