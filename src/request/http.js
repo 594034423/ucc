@@ -12,10 +12,8 @@
 //     axios.defaults.baseURL = 'http://192.168.0.80/uomp/';
 // }
 
-// axios.defaults.baseURL = 'http://192.168.0.101:9085'
-// axios.defaults.baseURL = 'http://192.168.0.102:9085'
-axios.defaults.baseURL = 'http://192.168.0.103:9085'
-// axios.defaults.baseURL = 'http://192.168.0.104:9085'
+axios.defaults.baseURL = 'http://192.168.0.102:9085'
+// axios.defaults.baseURL = 'http://192.168.0.103:9085'
 
 // 请求超时时间
 axios.defaults.timeout = 10000;

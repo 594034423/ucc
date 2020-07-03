@@ -6,15 +6,11 @@ var vm = new Vue({
         callInNumsContainer: null,          // 呼入量
         inOutTrendContainer: null,          // 呼入量趋势
         btn_AllChannels: '全部渠道',         //按钮名称
-        btn_Channel: '手机银行',             //按钮名称
+        btn_Channel: '单一渠道',             //按钮名称
         btn_AllSkillGroups: '全部技能组', 
-        btn_SkillGroups: '个人业务咨询',
+        btn_SkillGroups: '单一技能组',
         btn_CallInNums: '呼入量',
         btn_CallOutNums: '呼出量',
-        btn_DayData: '今日',
-        btn_WeekData: '本周',
-        btn_MonthData: '本月',
-        btn_YearData: '本年',
         inOutTrend: '呼入量趋势',
         inTrend: '呼入量趋势',
         outTrend: '呼出量趋势',
@@ -39,22 +35,22 @@ var vm = new Vue({
         beginTime:null,
         endTime:null,
         channelList: [              //渠道下拉列表
-            {name: '手机银行', id: '1', nums: 1000},
-            {name: '官方公众号', id: '2', nums: 1000},
-            {name: '信用卡公众号', id: '3', nums: 1000},
-            {name: '理财公众号', id: '4', nums: 1000},
-            {name: '网银', id: '5', nums: 1000},
-            {name: '直销银行', id: '6', nums: 1000},
-            {name: 'PC官网', id: '7', nums: 1000},
+            // {name: '手机银行', id: '1', nums: 1000},
+            // {name: '官方公众号', id: '2', nums: 1000},
+            // {name: '信用卡公众号', id: '3', nums: 1000},
+            // {name: '理财公众号', id: '4', nums: 1000},
+            // {name: '网银', id: '5', nums: 1000},
+            // {name: '直销银行', id: '6', nums: 1000},
+            // {name: 'PC官网', id: '7', nums: 1000},
         ],
         skillGroupsList: [          //技能组下拉列表
-            {name: '个人业务咨询', id: '1', nums: 11234},
-            {name: '个人业务办理', id: '2', nums: 1040},
-            {name: '信用卡业务', id: '3', nums: 1240},
-            {name: '对公业务', id: '4' ,nums: 105},
-            {name: '理财业务', id: '5' ,nums: 150},
-            {name: '贷款业务', id: '6' ,nums: 1010},
-            {name: '反欺诈业务', id: '7' ,nums: 140},
+            // {name: '个人业务咨询', id: '1', nums: 11234},
+            // {name: '个人业务办理', id: '2', nums: 1040},
+            // {name: '信用卡业务', id: '3', nums: 1240},
+            // {name: '对公业务', id: '4' ,nums: 105},
+            // {name: '理财业务', id: '5' ,nums: 150},
+            // {name: '贷款业务', id: '6' ,nums: 1010},
+            // {name: '反欺诈业务', id: '7' ,nums: 140},
         ],
         dateList: [
             {name: '今日', id: 'D'},
@@ -67,7 +63,7 @@ var vm = new Vue({
             channelList:[],
             skillGroupsList:[]
         },
-        // DateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+        // dateValue: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
         dateValue: '',  //时间选择器时间
         isAct: true
     },
@@ -75,9 +71,10 @@ var vm = new Vue({
 
         let that = this;
         //存点击事件
-        that.localStorageFn();
-        // //先获取数据
-        that._getVideoCallToday(); //今日呼入量和满意度
+        // that.localStorageFn();
+        //先获取数据
+        //今日呼入量和满意度
+        that._getVideoCallToday(); 
         // window.setInterval(()=>{
         //     setTimeout(that._getVideoCallHistory(),0)
         //     console.log('今日呼入量和满意度,5秒刷一次')
@@ -113,93 +110,97 @@ var vm = new Vue({
             }, 100)
         })
     },
-    updated(){
-        let _this = this;
-            _this.satisfactionEcharts();
-            _this.callInNumsEcharts();
-            _this.inOutTrendEcharts();
-    },
     watch: {
         // 监控时间选择器的日期选择
         dateValue(date) {
             console.log(date)
         },
-        echartData(nVal,oVal){
-            console.log('旧数据:'+nVal,',新数据:'+oVal)
-        }
     },
     methods: {
 
-        localStorageFn(){
-            //渠道      channnelIndex -> AllChannel, Channel
-            sessionStorage.setItem('channelIndex',this.channelAct)
-            //技能组    skillGroupsIndex -> AllSkillGroups, SkillGroups
-            sessionStorage.setItem('skillGroupsIndex',this.skillGroupsAct)
-            //呼叫趋势    callTrendIndex -> I, O
-            sessionStorage.setItem('callTrendIndex',this.callTrendAct)
-            //日周月年选择  dateIndex -> D, W, M, Y
-            sessionStorage.setItem('dateIndex',this.dateAct)
-            //渠道-技能组列表数据   listAct ->  ChannelList, SkillGroupsList
-            sessionStorage.setItem('listAct', this.listAct)
-        },
+        // localStorageFn(){
+        //     //渠道      channnelIndex -> AllChannel, Channel
+        //     sessionStorage.setItem('channelIndex',this.channelAct)
+        //     //技能组    skillGroupsIndex -> AllSkillGroups, SkillGroups
+        //     sessionStorage.setItem('skillGroupsIndex',this.skillGroupsAct)
+        //     //呼叫趋势    callTrendIndex -> I, O
+        //     sessionStorage.setItem('callTrendIndex',this.callTrendAct)
+        //     //日周月年选择  dateIndex -> D, W, M, Y
+        //     sessionStorage.setItem('dateIndex',this.dateAct)
+        //     //渠道-技能组列表数据   listAct ->  ChannelList, SkillGroupsList
+        //     sessionStorage.setItem('listAct', this.listAct)
+        // },
         // 点击全部渠道
         click_AllChannels(index){
             this.channelAct = index
-            sessionStorage.setItem('channelIndex',this.channelAct)
+            this.btn_Channel = '单一渠道'
+            // sessionStorage.setItem('channelIndex',this.channelAct)
             console.log(this.channelAct)
+            this._getVideoCallHistory();
+            this._getVideoCallByDateType();
         },
         //选择单一渠道
-        select_Channel(index) {
-            console.log(index)
-            this.btn_Channel = index
+        select_Channel(code,value) {
+            console.log(code)
+            this.btn_Channel = value
             this.channelAct = 'Channel'
-            sessionStorage.setItem('channelIndex', this.channelAct)
+            // sessionStorage.setItem('channelIndex', this.channelAct)
+            this._getVideoCallHistory();
+            this._getVideoCallByDateType();
         },
 
         // 点击全部技能组
         click_AllSkillGroups(index){
             this.skillGroupsAct = index
-            sessionStorage.setItem('skillGroupsIndex',this.skillGroupsAct)
+            this.btn_SkillGroups = '单一技能组'
+            // sessionStorage.setItem('skillGroupsIndex',this.skillGroupsAct)
             console.log(index)
+            this._getVideoCallHistory();
+            this._getVideoCallByDateType();
         },
         //选择单一业务组
-        select_SkillGroups(index) {
-            console.log(index)
-            this.btn_SkillGroups = index
+        select_SkillGroups(code,name) {
+            console.log(code)
+            this.btn_SkillGroups = name
             this.skillGroupsAct = 'SkillGroups'
-            sessionStorage.setItem('skillGroupsIndex', this.skillGroupsAct)
+            // sessionStorage.setItem('skillGroupsIndex', this.skillGroupsAct)
+            this._getVideoCallHistory();
+            this._getVideoCallByDateType();
         },
 
         // 点击呼入量
         click_CallInNums(index){
             console.log(index)
             this.inOutTrend = this.inTrend
+            this.inOutRank = this.inRank
             this.callTrendAct = index;
-            sessionStorage.setItem('callTrendIndex',index)
+            // sessionStorage.setItem('callTrendIndex',index)
             this._getVideoCallByDateType()
         },
         // 点击呼出量
         click_CallOutNums(index){
             console.log(index)
             this.inOutTrend = this.outTrend
+            this.inOutRank = this.outRank
             this.callTrendAct = index
-            sessionStorage.setItem('callTrendIndex',index)
+            // sessionStorage.setItem('callTrendIndex',index)
             this._getVideoCallByDateType()
         },
         //点击日月年
         select_Date(index) {
             console.log('点击了:'+index)
             this.dateAct = index
-            sessionStorage.setItem('dateIndex',index)
+            // sessionStorage.setItem('dateIndex',index)
             this._getVideoCallByDateType();
         },
+        //选择日期
         select_DateTime() {
             console.log(111)
         },
-        
+        //点击列表
         click_List(index){
             this.listAct = index
-            sessionStorage.setItem('listAct',this.listAct)
+            // sessionStorage.setItem('listAct',this.listAct)
             this.trendList.mark = this.listAct
             console.log(this.listAct)
         },
@@ -352,6 +353,8 @@ var vm = new Vue({
             getVideoCallToday({
                 // channelNo: sessionStorage.getItem('channelIndex'),
                 // skillGroupCode: sessionStorage.getItem('skillGroupsIndex')
+                channelNo: this.channelAct,
+                skillGroupCode: this.skillGroupsAct
             })
             .then(res => {
                 this.todayData = res.bean
@@ -363,15 +366,17 @@ var vm = new Vue({
             ])
         },
 
-        //今15天呼入量和满意度  --24小时刷一次
+        //今15天呼入量和满意度  
         _getVideoCallHistory(){
-            var channelIndex = sessionStorage.getItem('channelIndex');
-            var skillGroups = sessionStorage.getItem('skillGroupsIndex')
+            // var channelIndex = sessionStorage.getItem('channelIndex');
+            // var skillGroups = sessionStorage.getItem('skillGroupsIndex')
             // console.log(channelIndex)
             // console.log(skillGroups)
             getVideoCallHistory({
                 // channelNo: sessionStorage.getItem('channelIndex'),
                 // skillGroupCode: sessionStorage.getItem('skillGroupsIndex')
+                // channelNo: this.channelAct,
+                // skillGroupCode: this.skillGroupsAct
             })
             .then(res => {
                 console.log(res,'今15天呼入量和满意度')
@@ -394,19 +399,21 @@ var vm = new Vue({
                 joinQueryTemp_Y = []
                 satisRateTemp_X = []
                 satisRateTemp_Y = []
+                this.satisfactionEcharts();
+                this.callInNumsEcharts();
             })
             .catch(err => {
                 console.log(err,'getVideoCallHistory数据获取异常')
             })
         },
         
-        //今日呼入量和满意度 -日期 --15s刷新一次
+        //今日呼入量和满意度 -日期 
         _getVideoCallByDateType(){
-            var channelIndex =  sessionStorage.getItem('channelIndex');
-            var skillGroupIndex =  sessionStorage.getItem('skillGroupIndex');
-            var callTrendIndex =  sessionStorage.getItem('callTrendIndex');
-            var dateIndex =  sessionStorage.getItem('dateIndex');
-            switch(dateIndex){
+            // var channelIndex =  sessionStorage.getItem('channelIndex');
+            // var skillGroupIndex =  sessionStorage.getItem('skillGroupsIndex');
+            // var callTrendIndex =  sessionStorage.getItem('callTrendIndex');
+            // var dateIndex =  sessionStorage.getItem('dateIndex');
+            switch(this.dateAct){
                 case 'D':
                     this.beginTime = this.getDay('D');
                     this.endTime = this.getDay('D');
@@ -426,87 +433,24 @@ var vm = new Vue({
                     this.endTime = this.getDay('D')
             }
             getVideoCallByDateType({
-                channelNo: channelIndex,
-                skillGroupCode: skillGroupIndex,
-                queryTimeType: dateIndex,
-                queryCallType: callTrendIndex,
+                // channelNo: channelIndex,
+                // skillGroupCode: skillGroupIndex,
+                // queryTimeType: dateIndex,
+                // queryCallType: callTrendIndex,
+                // beginTime: this.beginTime,
+                // endTime: this.endTime
+                channelNo: this.channelAct,
+                skillGroupCode: this.skillGroupsAct,
+                queryTimeType: this.dateAct,
+                queryCallType: this.callTrendAct,
                 beginTime: this.beginTime,
                 endTime: this.endTime
             })
             .then(res => {
+                console.log(res)
                 var callTrend_X = [];
-                var callTrend_Y = [];
-                // switch(dateIndex) {
-                //     case 'D':
-                //         // callTrend_X = [
-                //         //     '00:00', '01:00', '02:00', '03:00',
-                //         //     '04:00', '05:00', '06:00', '07:00', 
-                //         //     '08:00', '09:00', '10:00', '11:00', 
-                //         //     '12:00', '13:00', '14:00', '14:00',
-                //         //     '15:00', '16:00', '17:00', '18:00', 
-                //         //     '19:00', '20:00', '21:00', '22:00',
-                //         //     '23:00', '24:00'     
-                //         // ]
-                //         for(var i = 0; i < 25; i++){
-                //             if(i<10){
-                //                 callTrend_X.push('0'+i+':00')
-                //             }
-                //             if(i>10){
-                //                 callTrend_X.push(i+':00')
-                //             }
-                //         }
-                //         this.echartData.callTrend_X = callTrend_X
-                //         callTrend_Y = Array(24).fill('')
-                //         break;
-                //     case 'W':
-                //         callTrend_X = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
-                //         // for(var i = 0; i < 7; i++){
-                //         //     callTrend_X.push('星期'+(i+1))
-                //         // }
-                //         callTrend_Y = Array(7).fill('')
-                //         this.echartData.callTrend_X = callTrend_X
-                //         break;
-                //     case 'M':
-                //         //查看本月有多少天
-                //         var dayNum = new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
-                //         callTrend_Y = Array(dayNum).fill('')
-                //         for(var i = 0; i < dayNum; i++){
-                //             callTrend_X.push((i+1)+'号')
-                //         }
-                //         this.echartData.callTrend_X = callTrend_X
-                //         break;
-                //     case 'Y':
-                //         callTrend_Y = Array(12).fill('')
-                //         for(var i = 0; i < 12; i++){
-                //             callTrend_X.push((i+1)+'月')
-                //         }
-                //         this.echartData.callTrend_X = callTrend_X
-                //         break;
-                // }
-
-                // if(callTrendIndex == 'I'){
-                //     console.log(callTrend_Y)
-                //     for(var i = 0; i < res.rows.length; i++){
-                //         callTrend_Y.splice(res.rows[i].beginTime-1,1,res.rows[i].joinQueryNum)
-                //     }
-                //     this.echartData.callTrend_Y = callTrend_Y
-                //     callTrend_Y = []
-                // }else {
-                //     console.log(callTrend_Y,11)
-                //     for(var i = 0; i < res.rows.length; i++){
-                //         callTrend_Y.splice(res.rows[i].beginTime-1,1,res.rows[i].callOutNum)
-                //     }
-                //     this.echartData.callTrend_Y = callTrend_Y
-                //     callTrend_Y = []
-                // }
-                // callTrend_X = []
-                // console.log(this.echartData.callTrend_X,3)
-                // console.log(this.echartData.callTrend_Y,4)
-
-                // console.log(this.trendList.channelList,1111111)
-                // console.log(this.trendList.skillGroupsList,222222)
-                
-                if(callTrendIndex == 'I') {
+                var callTrend_Y = [];         
+                if(this.callTrendAct == 'I') {
                     for(var i = 0; i < res.rows.length; i++){
                         callTrend_X.push(res.rows[i].beginTime)
                         callTrend_Y.push(res.rows[i].joinQueryNum)
@@ -519,8 +463,11 @@ var vm = new Vue({
                 }
                 this.echartData.callTrend_X = callTrend_X
                 this.echartData.callTrend_Y = callTrend_Y
+                // console.log(this.echartData.callTrend_X,111)
+                // console.log(this.echartData.callTrend_Y,222)
                 callTrend_X = [];
                 callTrend_Y = [];
+                this.inOutTrendEcharts();
                 // this.trendList.channelList = res.map.channelCallIn
                 // this.trendList.skillGroupsList = res.map.skillCallIn
             })
@@ -533,9 +480,13 @@ var vm = new Vue({
         _getSkillAndChannel(){
             getSkillAndChannel()
             .then(res => {
-                console.log(res)
                 this.trendList.channelList = res.map.channels
-                this.trendList.skillGroupsList = res.map.skiiGroups
+                this.trendList.skillGroupsList = res.map.skillGroups
+                this.channelList = res.map.channels
+                this.skillGroupsList = res.map.skillGroups
+            })
+            .catch(err => {
+                console.log(err,'_getSkillAndChannel获取数据异常')
             })
         },
 
@@ -591,6 +542,7 @@ var vm = new Vue({
             }
         },
 
+        //秒转分秒
         s_to_ms(s){
             var m;
             m = Math.floor(s/60)

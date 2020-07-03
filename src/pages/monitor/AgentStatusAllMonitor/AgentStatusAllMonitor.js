@@ -6,25 +6,47 @@ var vm = new Vue({
         onSiteStarAgentNumsContainer: null, // 现场各星级柜员人数
         skillGroupsAgentStatusContainer: null,// 技能组柜员状态统计
         btn_AllSkillGroups: '全部技能组', 
-        btn_SkillGroups: '个人业务咨询',
-        skillGroupAct: 'AllSkillGroups',   //技能组控制点击按钮
+        btn_SkillGroups: '单一技能组',
+        skillGroupsAct: 'AllSkillGroups',   //技能组控制点击按钮
         skillGroupsList: [
-            {name: '个人业务咨询', id: '1', nums: 11234},
-            {name: '个人业务办理', id: '2', nums: 1040},
-            {name: '信用卡业务', id: '3', nums: 1240},
-            {name: '对公业务', id: '4' ,nums: 105},
-            {name: '理财业务', id: '5' ,nums: 150},
-            {name: '贷款业务', id: '6' ,nums: 1010},
-            {name: '反欺诈业务', id: '7' ,nums: 140},
+            // {name: '个人业务咨询', id: '1', nums: 11234},
+            // {name: '个人业务办理', id: '2', nums: 1040},
+            // {name: '信用卡业务', id: '3', nums: 1240},
+            // {name: '对公业务', id: '4' ,nums: 105},
+            // {name: '理财业务', id: '5' ,nums: 150},
+            // {name: '贷款业务', id: '6' ,nums: 1010},
+            // {name: '反欺诈业务', id: '7' ,nums: 140},
         ],
         starValue: null,
-        starColors:['#99A9BF', '#F7BA2A', '#FF9900']
+        starColors:['#99A9BF', '#F7BA2A', '#FF9900'],
+        todayStatus:{}, //今日各个状态 -- 现场状态和环形图
+        echartData:{
+            agentStatus:[],
+            agentStar:[]
+        },
+        skillAgents:[]  //技能组各状态柜员数 -- 柱形图
+
+    },
+    created(){
+        let that = this;
+        // that.localStorageFn();
+
+        //各个状态柜员数 --5秒刷新一次
+        that._getMonitorVideoAgents();
+        // window.setInterval(()=>{
+        //     setTimeout(that._getMonitorVideoAgents(),0)
+        //     console.log('各个状态柜员数')
+        // },5000)
+        that._getMonitorSkillAgentNum();
+
+        //技能组各状态柜员数 --星级
+        // window.setInterval(()=>{
+        //     setTimeout(that._getMonitorSkillAgentNum(),0)
+        //     console.log('技能组各状态柜员数')
+        // },5000)
+        that._getSkillAndChannel()
     },
     mounted(){
-        this.onSiteStatusAgentNumsEcharts();
-        this.onSiteStarAgentNumsEcharts();
-        this.skillGroupsAgentStatusEcharts();
-
         // Echart 缩放
         let _this = this;
         window.addEventListener('resize', function () { 
@@ -35,42 +57,33 @@ var vm = new Vue({
                 _this.skillGroupsAgentStatusContainer.resize();
             }, 100)
         })
-
-        setTimeout(() => {
-            this.refreshOnSiteStatusAgentNumsEcharts()
-        },2000)
-
-        setTimeout(() => {
-            this.refreshOnSiteStarAgentNumsEcharts()
-        },3000)
-
-        setTimeout(() => {
-            this.refreshSkillGroupsAgentStatusEcharts()
-        },4000)
     },
     watch: {
         // 监控时间选择器的日期选择
         dateValue(date) {
             console.log(date)
-        }
+        },
     },
     methods: {
         // 点击全部技能组
-        click_AllSkillGroups(index){
-            this.skillGroupAct = index
+        click_AllSkillGroups(){
+            this.skillGroupsAct = null
+            this.btn_SkillGroups = '单一技能组'
             console.log(this.btn_AllSkillGroups)
+            this._getMonitorVideoAgents()
         },
         //选择单一业务组
-        select_SkillGroups(index) {
-            console.log(index)
-            this.btn_SkillGroups = index
-            this.skillGroupAct = 'SkillGroups'
+        select_SkillGroups(code,name) {
+            console.log(code)
+            this.btn_SkillGroups = name
+            this.skillGroupsAct = code
+            this._getMonitorVideoAgents()
         },
         
 
         //现场各状态柜员人数--环形图
         onSiteStatusAgentNumsEcharts() {
-            console.log(this.$refs.onSiteStatusAgentNumsEcharts)
+            // console.log(this.$refs.onSiteStatusAgentNumsEcharts)
             var dom = this.$refs.onSiteStatusAgentNumsEcharts;
             this.onSiteStatusAgentNumsContainer = echarts.init(dom)
             var option = {
@@ -142,11 +155,11 @@ var vm = new Vue({
                             }
                         },
                         data: [
-                            {value: 1335, name: '就绪'},
-                            {value: 310, name: '小休'},
-                            {value: 234, name: '振铃'},
-                            {value: 135, name: '通话'},
-                            {value: 1548, name: '事后处理'}
+                            {value: this.todayStatus.idleAgentNum, name: '就绪'},
+                            {value: this.todayStatus.busyAgentNum, name: '小休'},
+                            {value: this.todayStatus.ringingAgentNum, name: '振铃'},
+                            {value: this.todayStatus.takingAgentNum, name: '通话'},
+                            {value: this.todayStatus.acwAgentNum, name: '事后处理'}
                         ],
                     }
                 ]
@@ -158,7 +171,7 @@ var vm = new Vue({
 
         //现场各星级柜员人数--环形图
         onSiteStarAgentNumsEcharts() {
-            console.log(this.$refs.onSiteStarAgentNumsEcharts)
+            // console.log(this.$refs.onSiteStarAgentNumsEcharts)
             var dom = this.$refs.onSiteStarAgentNumsEcharts;
             this.onSiteStarAgentNumsContainer = echarts.init(dom)
             var option = {
@@ -228,11 +241,11 @@ var vm = new Vue({
                             }
                         },
                         data: [
-                            {value: 152, name: '一星'},
-                            {value: 302, name: '二星'},
-                            {value: 44, name: '三星'},
-                            {value: 55, name: '四星'},
-                            {value: 148, name: '五星'}
+                            {value: this.todayStatus.oneStarAgentNum, name: '一星'},
+                            {value: this.todayStatus.towStarAgentNum, name: '二星'},
+                            {value: this.todayStatus.threeStarAgentNum, name: '三星'},
+                            {value: this.todayStatus.fourStarAgentNum, name: '四星'},
+                            {value: this.todayStatus.fiveStarAgentNum, name: '五星'}
                         ],
                     }
                 ]
@@ -244,22 +257,23 @@ var vm = new Vue({
 
         //技能组柜员状态统计--对比柱形图
         skillGroupsAgentStatusEcharts() {
-            console.log(this.$refs.skillGroupsAgentStatusEcharts,111)
+            // console.log(this.$refs.skillGroupsAgentStatusEcharts,111)
             var dom = this.$refs.skillGroupsAgentStatusEcharts;
             this.skillGroupsAgentStatusContainer = echarts.init(dom)
             var option = {
                 legend: {},
                 tooltip: {},
                 dataset: {
-                    source: [
-                        ['product', '空闲', '小休', '通话', '事后处理'],
-                        ['个人业务咨询', 40, 60, 90, 12],
-                        ['信用卡业务', 83, 73, 55, 20],
-                        ['对公业务', 86, 65, 82, 80],
-                        ['理财业务', 72, 53, 39, 30],
-                        ['贷款业务', 22, 33, 49, 90],
-                        ['大额转账', 72, 53, 39, 22]
-                    ]
+                    // source: [
+                    //     ['product', '空闲', '小休','振铃','通话', '事后处理'],
+                    //     ['信用卡业务', 40, 60, 90,20, 12],
+                    //     ['信用卡业务', 83, 73, 55,20, 20],
+                    //     ['对公业务', 86, 65, 82,30 ,80],
+                    //     ['理财业务', 72, 53, 39, 40,30],
+                    //     ['贷款业务', 22, 33, 49,64 ,90],
+                    //     ['大额转账', 72, 53, 39, 41,22]
+                    // ]
+                    source: this.echartData.agentStar
                 },
                 grid: {
                     bottom: '10%',
@@ -284,60 +298,74 @@ var vm = new Vue({
             }
         },
         
-        // 模拟刷新现场各状态柜员人数
-        refreshOnSiteStatusAgentNumsEcharts() {
-            var data = [
-                {value: 1152, name: '就绪'},
-                {value: 3102, name: '小休'},
-                {value: 434, name: '振铃'},
-                {value: 535, name: '通话'},
-                {value: 1548, name: '事后处理'}
-            ];
-            console.log("刷新")
-            this.onSiteStatusAgentNumsContainer.setOption({
-                series: [{
-                    data: data
-                }]
+        //星级选择
+        starRate(index){
+            console.log(index)
+            this.starValue = index
+            this._getMonitorSkillAgentNum()
+
+        },
+        //清空星级
+        clearStar(){
+            this.starValue = null
+            this._getMonitorSkillAgentNum()
+        },
+        //各个状态柜员数
+        _getMonitorVideoAgents(){
+            getMonitorVideoAgents({
+                skillGroupCode:this.skillGroupsAct
+            })
+            .then(res => {
+                this.todayStatus = res.map
+                this.onSiteStarAgentNumsEcharts()
+                this.onSiteStatusAgentNumsEcharts()
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err, 'getMonitorVideoAgents,各状态柜员数数据异常')
             })
         },
 
-        // 模拟刷新现场各星级柜员人数
-        refreshOnSiteStarAgentNumsEcharts() {
-            var data = [
-                {value: 5152, name: '一星'},
-                {value: 102, name: '二星'},
-                {value: 434, name: '三星'},
-                {value: 535, name: '四星'},
-                {value: 1248, name: '五星'}
-            ];
-            console.log("刷新2")
-            this.onSiteStarAgentNumsContainer.setOption({
-                series: [{
-                    data: data
-                }]
-            })
-        },
-
-        // 模拟刷新技能组柜员状态统计
-        refreshSkillGroupsAgentStatusEcharts() {
-            var data = [
-                ['product', '空闲', '小休', '通话', '事后处理'],
-                ['个人业务咨询', 12, 40, 90, 12],
-                ['信用卡业务', 33, 34, 25, 50],
-                ['对公业务', 46, 12, 42, 80],
-                ['理财业务', 52, 23, 59, 20],
-                ['贷款业务', 62, 32, 49, 20],
-                ['大额转账', 72, 51, 69, 22]
-            ]
-            console.log('刷新3')
-            this.skillGroupsAgentStatusContainer.setOption({
-                dataset: {
-                    source: data
+        //技能组各状态柜员数
+        _getMonitorSkillAgentNum(){
+            getMonitorSkillAgentNum({serviceStart:this.starValue})
+            .then(res => {
+                this.skillAgents = res.map.skillAgents
+                var temp = [];
+                temp.push(['product', '就绪', '小休', '振铃', '通话', '事后处理'])
+                for(let i = 0; i < Object.values(this.skillAgents).length; i++){
+                    temp.push([
+                        Object.keys(this.skillAgents)[i],
+                        Object.values(this.skillAgents)[i].idleAgentNum != 0 ? Object.values(this.skillAgents)[i].idleAgentNum : 20,
+                        Object.values(this.skillAgents)[i].busyAgentNum != 0 ? Object.values(this.skillAgents)[i].busyAgentNum : 30,
+                        Object.values(this.skillAgents)[i].ringingAgentNum != 0 ? Object.values(this.skillAgents)[i].ringingAgentNum : 40,
+                        Object.values(this.skillAgents)[i].takingAgentNum != 0 ? Object.values(this.skillAgents)[i].takingAgentNum : 50,
+                        Object.values(this.skillAgents)[i].acwAgentNum != 0 ? Object.values(this.skillAgents)[i].acwAgentNum: 60
+                    ])
                 }
+                this.echartData.agentStar = temp;
+                temp = [];
+                this.skillGroupsAgentStatusEcharts()
+            })
+            .catch(err => {
+                console.log(err,'getMonitorSkillAgentNum,技能组各状态柜员数数据异常')
             })
         },
-        starRate(a){
-            console.log(a)
+
+        //获取渠道和技能组信息
+        _getSkillAndChannel(){
+            getSkillAndChannel()
+            .then(res => {
+                this.skillGroupsList = res.map.skillGroups
+            })
+        },
+        objLength(obj){
+            let count = 0;
+            for(let i in obj){
+                count++;
+            }
+            return count;
         }
+
     }
 })

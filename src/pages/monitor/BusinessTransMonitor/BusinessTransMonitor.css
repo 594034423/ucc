@@ -23,6 +23,9 @@ body {
     box-sizing: border-box;
     overflow: auto;
 }
+.container::-webkit-scrollbar {
+    display: none;
+}
 
 .btn-one,.btn-two {
     display: inline-block;
@@ -114,10 +117,13 @@ table {
     background-color: #fff;
     justify-content: space-between;
     margin-top: 20px;
+    flex: 1;
+    min-height: 200px;
 }
 .footer-left {
     width: 70%;
     background-color: #fff;
+    flex: inherit;
 }
 .footer-right {
     width: 30%
@@ -129,6 +135,7 @@ table {
 #transactionTrendEcharts {
     margin-top: 10px;
     height: 100%;
+    /* min-height: 300px; */
 }
 /*three-data*/
 .three-data {

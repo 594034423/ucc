@@ -60,6 +60,9 @@ table {
     margin: 6px 0px;
     padding: 10px;
 }
+.btn-clearStar {
+    border: none;
+}
 
 .el-button+.el-button {
     margin-left: 0;
@@ -82,6 +85,14 @@ table {
 }
 .header-data-right,.header-data-left {
     display: inline-block
+}
+.el-rate {
+    display: inline-block;
+}
+.btn-star {
+    border-radius: 0px;
+    display: inline-block;
+    border: none;
 }
 .el-rate__icon {
     font-size: 26px;

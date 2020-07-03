@@ -17,3 +17,12 @@ const getVideoCallByDateType = p => get('/mrc/mrcMonitorVideo/getVideoCallByDate
 
 //获取渠道和技能组信息
 const getSkillAndChannel = p => get('/mrc/mrcMonitorVideo/getSkillAndChannel', p)
+
+//各状态柜员数
+const getMonitorVideoAgents = p => get('/mrc/mrcMonitorVideoSkillAgent/getMonitorVideoAgents', p)
+
+//技能组各状态柜员数
+const getMonitorSkillAgentNum = p => get('/mrc/mrcMonitorVideoSkillAgent/getMonitorSkillAgentNum', p)
+
+//总交易量和成功率
+const getBussinessTotalTran = p => get('/mrc/mrcMonitorBussiness/getBussinessTotalTran', p)

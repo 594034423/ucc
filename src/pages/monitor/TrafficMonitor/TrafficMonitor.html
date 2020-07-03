@@ -27,7 +27,7 @@
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item  v-for="(item, index) in channelList" :key="item.id" @click.native="select_Channel(item.name)">{{item.name}}</el-dropdown-item>
+                            <el-dropdown-item  v-for="(item, index) in channelList" :key="item.id" @click.native="select_Channel(item.code,item.value)">{{item.value}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -42,7 +42,7 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item  v-for="(item, index) in skillGroupsList" :key="item.id" @click.native="select_SkillGroups(item.name)">{{item.name}}</el-dropdown-item>
+                        <el-dropdown-item  v-for="(item, index) in skillGroupsList" :key="item.id" @click.native="select_SkillGroups(item.code,item.name)">{{item.name}}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 </div>
@@ -191,7 +191,7 @@
                         <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td width="60%" class="footer-fontsize">{{inOutTrend}}</td>
+                                    <td width="60%" class="footer-fontsize">{{inOutRank}}</td>
                                     <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'ChannelList'}" @click="click_List('ChannelList')">渠道</el-button></td>
                                     <td width="20%"><el-button size="mini" class="footer-fontsize" plain :class="{btnactive:listAct == 'SkillGroupsList'}" @click="click_List('SkillGroupsList')">技能组</el-button></td>
                                 </tr>
@@ -201,7 +201,7 @@
                                     <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.code}}</td>
                                 </tr>
                                 <tr v-if="trendList.mark == 'SkillGroupsList'" v-for="(item, index) in trendList.skillGroupsList" :key="item.index">
-                                    <td class="footer-fontsize" >{{index+1}}. {{item.value}}</td>
+                                    <td class="footer-fontsize" >{{index+1}}. {{item.name}}</td>
                                     <td colspan="2" class="footer-nums" v-if="callTrendAct == 'I'">{{item.code}}</td>
                                     <td colspan="2" class="footer-nums" v-if="callTrendAct == 'O'">{{item.code}}</td>
                                 </tr>
